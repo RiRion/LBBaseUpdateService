@@ -5,22 +5,22 @@ using TheNewCSVEditorForLB.Services.Comparators;
 
 namespace TheNewCSVEditorForLB.Data.Repositories
 {
-    public class VendorDictionaryRepository : IVendorDictionaryRepository
+    public class VendorsWithProductIdRepository : IVendorsWithProductIdRepository
     {
-        public List<VendorDictionary> VendorDictionary { get; set; }
+        public List<VendorsWithProductId> VendorDictionary { get; set; }
 
-        public VendorDictionaryRepository()
+        public VendorsWithProductIdRepository()
         {
-            VendorDictionary = new List<VendorDictionary>();
+            VendorDictionary = new List<VendorsWithProductId>();
         }
-        public void AddMany(List<VendorDictionary> list)
+        public void AddMany(List<VendorsWithProductId> list)
         {
             VendorDictionary.AddRange(list);
         }
 
         public void AddVendorId(int correctVendorId, int importVendorId)
         {
-            VendorDictionary.Add(new VendorDictionary{CorrectVendorId = correctVendorId, ImportVendorId = importVendorId});
+            VendorDictionary.Add(new VendorsWithProductId{CorrectVendorId = correctVendorId, ImportVendorId = importVendorId});
             VendorDictionary.Sort(new VendorDictionaryComp());
         }
     }

@@ -7,8 +7,8 @@ namespace TheNewCSVEditorForLB.Services.Interfaces
     public interface IChangeData
     {
         IProductRepository Product { get; set; }
-        IVendorDictionaryRepository Vendors { get; set; }
-        List<VendorDictionary> NewVendors { get; set; }
+        IVendorsWithProductIdRepository Vendors { get; set; }
+        List<VendorsWithProductId> NewVendors { get; set; }
         List<Product> NewProductId { get; set; }
         
         void ChangeFieldVendorIdAndVendorCountry();

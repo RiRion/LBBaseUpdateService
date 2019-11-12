@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace TheNewCSVEditorForLB.Data.Interfaces
 {
-    public interface IIeIdDictionaryRepository
+    public interface IProductIdWithInternalIdRepository
     {
-        List<IeIdDictionary> DictionaryID { get; }
-        bool GetFromServer(string path);
+        List<ProductIdWithIntarnalId> AllIntarnalId { get; }
+        bool GetInternalIdFromServer(string path);
     }
 }

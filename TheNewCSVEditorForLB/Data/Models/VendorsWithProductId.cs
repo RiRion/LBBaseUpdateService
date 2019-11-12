@@ -2,7 +2,7 @@ using CsvHelper.Configuration.Attributes;
 
 namespace TheNewCSVEditorForLB.Data.Models
 {
-    public class VendorDictionary
+    public class VendorsWithProductId
     {
         [Name("CorrectVendorId")]
         public int CorrectVendorId { get; set; }

@@ -1,12 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e9730e5a-897e-402b-ba8d-f43740baa2e4" name="Default Changelist" comment="" />
+    <list default="true" id="e9730e5a-897e-402b-ba8d-f43740baa2e4" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Util/RegistrationType.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.TheNewCSVEditorForLB/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TheNewCSVEditorForLB/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.TheNewCSVEditorForLB/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TheNewCSVEditorForLB/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vs/TheNewCSVEditorForLB/xs/UserPrefs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/TheNewCSVEditorForLB/xs/UserPrefs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vs/TheNewCSVEditorForLB/xs/project-cache/TheNewCSVEditorForLB-Debug.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/TheNewCSVEditorForLB/xs/project-cache/TheNewCSVEditorForLB-Debug.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vs/TheNewCSVEditorForLB/xs/sqlite3/storage.ide" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/TheNewCSVEditorForLB/xs/sqlite3/storage.ide" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Interfaces/IIeIdDictionaryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Interfaces/IIeIdDictionaryRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Interfaces/IVendorDictionaryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Interfaces/IVendorsWithProductIdRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Mapping/VendorDictionaryMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Mapping/VendorDictionaryMap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Models/IeIdDictionary.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Models/ProductIdWithIntarnalId.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Models/VendorDictionary.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Models/VendorsWithProductId.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/IeIdDictionaryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/ProductIdWithInternalIdRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/ProductRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/ProductRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/VendorDictionaryRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/VendorsWithProductIdRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/ChangeData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/ChangeData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Comparators/IeIdDictionaryComp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Comparators/IeIdDictionaryComp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Comparators/VendorDictionaryComp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Comparators/VendorDictionaryComp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/DataStorageProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/DataStorageProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Interfaces/IChangeData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Interfaces/IChangeData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Interfaces/IDataStorageProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Interfaces/IDataStorageProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/TheNewCSVEditorForLB.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/TheNewCSVEditorForLB.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/bin/Debug/netcoreapp3.0/CsvHelper.dll" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/bin/Debug/netcoreapp3.0/CsvHelper.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/bin/Debug/netcoreapp3.0/Newtonsoft.Json.dll" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/bin/Debug/netcoreapp3.0/Newtonsoft.Json.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/bin/Debug/netcoreapp3.0/TheNewCSVEditorForLB.deps.json" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/bin/Debug/netcoreapp3.0/TheNewCSVEditorForLB.deps.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/bin/Debug/netcoreapp3.0/TheNewCSVEditorForLB.dll" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/bin/Debug/netcoreapp3.0/TheNewCSVEditorForLB.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/bin/Debug/netcoreapp3.0/TheNewCSVEditorForLB.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/bin/Debug/netcoreapp3.0/TheNewCSVEditorForLB.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/Debug/netcoreapp3.0/TheNewCSVEditorForLB.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/Debug/netcoreapp3.0/TheNewCSVEditorForLB.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/Debug/netcoreapp3.0/TheNewCSVEditorForLB.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/Debug/netcoreapp3.0/TheNewCSVEditorForLB.csproj.FileListAbsolute.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/Debug/netcoreapp3.0/TheNewCSVEditorForLB.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/Debug/netcoreapp3.0/TheNewCSVEditorForLB.csprojAssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/Debug/netcoreapp3.0/TheNewCSVEditorForLB.dll" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/Debug/netcoreapp3.0/TheNewCSVEditorForLB.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/Debug/netcoreapp3.0/TheNewCSVEditorForLB.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/Debug/netcoreapp3.0/TheNewCSVEditorForLB.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/TheNewCSVEditorForLB.csproj.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/TheNewCSVEditorForLB.csproj.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/TheNewCSVEditorForLB.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/TheNewCSVEditorForLB.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/TheNewCSVEditorForLB.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/TheNewCSVEditorForLB.csproj.nuget.g.props" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/TheNewCSVEditorForLB/obj/project.packagespec.json" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Models/Product.cs" root0="FORCE_HIGHLIGHTING" />
@@ -21,12 +62,14 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5A91243F-035E-458D-A6E6-50D892676D08/bf/9304b239/JsonConverter`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/CFB73215-B879-4AA1-BED8-073EDBAD763D/26/0815f092/JsonSerializer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Mapping/CategoriesMap.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Util/RegistrationType.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Mapping/ImagesMap.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6936A521-FED8-4DEB-8B14-A7F0DF001041/35/ba913191/Nullable`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/16775451-A13F-4DE6-9B27-54395A39BA7C/dc/a8044e0f/Configuration.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/B1AAE905-9DE5-489E-B221-3DA4E3EF8064/10/c6727e0f/StringReader.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/CFB73215-B879-4AA1-BED8-073EDBAD763D/8b/c4aa7ead/JsonTextReader.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/CFB73215-B879-4AA1-BED8-073EDBAD763D/a4/8125e253/DefaultContractResolver.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Models/ProductIdWithIntarnalId.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/CFB73215-B879-4AA1-BED8-073EDBAD763D/79/4af5b7f5/JsonSerializerInternalReader.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/CFB73215-B879-4AA1-BED8-073EDBAD763D/bb/1051b4ea/JsonSerializerInternalBase.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Program.cs" root0="FORCE_HIGHLIGHTING" />
@@ -44,18 +87,15 @@
     <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Services/ChangeData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF0ED6A1-E7FA-4456-8F6B-0B3C97927A79/15/975ee6ef/HttpClient.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Interfaces/IChangeData.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Comparators/IeIdDictionaryComp.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Services/StatusCode.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Interfaces/IVendorDictionaryRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/VendorDictionaryRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Interfaces/IVendorsWithProductIdRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/VendorsWithProductIdRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/56C1FBAA-ADF8-426A-91DB-87B46E8C8EAF/e3/720835ca/Int32.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Models/IeIdDictionary.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Interfaces/IIeIdDictionaryRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/IeIdDictionaryRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Models/VendorDictionary.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/ProductIdWithInternalIdRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Models/VendorsWithProductId.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Comparators/VendorDictionaryComp.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Comparators/ProductComp.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Services/DataStorageProvider.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Interfaces/IDataStorageProvider.cs" root0="FORCE_HIGHLIGHTING" />
@@ -103,14 +143,18 @@
         <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Comparators/IeIdDictionaryComp.cs" />
         <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Interfaces/IProductRepository.cs" />
         <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Interfaces/IVendorDictionaryRepository.cs" />
-        <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/ProductRepository.cs" />
         <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/VendorDictionaryRepository.cs" />
         <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Interfaces/IIeIdDictionaryRepository.cs" />
         <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/IeIdDictionaryRepository.cs" />
         <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Interfaces/IChangeData.cs" />
         <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/StatusCode.cs" />
-        <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Program.cs" />
         <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/ChangeData.cs" />
+        <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Util/AutofacConfig.cs" />
+        <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/ProductRepository.cs" />
+        <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Models/VendorsWithProductId.cs" />
+        <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Data/Repositories/ProductIdWithInternalIdRepository.cs" />
+        <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Services/Util/RegistrationType.cs" />
+        <option value="$PROJECT_DIR$/TheNewCSVEditorForLB/Program.cs" />
       </list>
     </option>
   </component>
@@ -169,6 +213,9 @@
       <workItem from="1571862295782" duration="3014000" />
       <workItem from="1571922288857" duration="522000" />
       <workItem from="1572440517583" duration="46812000" />
+      <workItem from="1572891655627" duration="177000" />
+      <workItem from="1573406004920" duration="27000" />
+      <workItem from="1573496209973" duration="6817000" />
     </task>
     <servers />
   </component>
@@ -177,6 +224,19 @@
   </component>
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="true" />
   </component>

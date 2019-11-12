@@ -3,10 +3,10 @@ using TheNewCSVEditorForLB.Data.Models;
 
 namespace TheNewCSVEditorForLB.Data.Interfaces
 {
-    public interface IVendorDictionaryRepository
+    public interface IVendorsWithProductIdRepository
     {
-        List<VendorDictionary> VendorDictionary { get; set; }
-        void AddMany(List<VendorDictionary> list);
+        List<VendorsWithProductId> VendorDictionary { get; set; }
+        void AddMany(List<VendorsWithProductId> list);
         void AddVendorId(int correctVendorId, int importVendorId);
     }
 }

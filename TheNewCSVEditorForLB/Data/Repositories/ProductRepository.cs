@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using TheNewCSVEditorForLB.Data.Interfaces;
 using TheNewCSVEditorForLB.Data.Models;
 

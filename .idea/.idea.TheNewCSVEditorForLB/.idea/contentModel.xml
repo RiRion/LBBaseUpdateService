@@ -11,7 +11,7 @@
           <e p="Interfaces" t="Include">
             <e p="IIeIdDictionaryRepository.cs" t="Include" />
             <e p="IProductRepository.cs" t="Include" />
-            <e p="IVendorDictionaryRepository.cs" t="Include" />
+            <e p="IVendorsWithProductIdRepository.cs" t="Include" />
           </e>
           <e p="Mapping" t="Include">
             <e p="CategoriesMap.cs" t="Include" />
@@ -21,15 +21,15 @@
           </e>
           <e p="Models" t="Include">
             <e p="Categories.cs" t="Include" />
-            <e p="IeIdDictionary.cs" t="Include" />
             <e p="Images.cs" t="Include" />
             <e p="Product.cs" t="Include" />
-            <e p="VendorDictionary.cs" t="Include" />
+            <e p="ProductIdWithIntarnalId.cs" t="Include" />
+            <e p="VendorsWithProductId.cs" t="Include" />
           </e>
           <e p="Repositories" t="Include">
-            <e p="IEIDDictionaryRepository.cs" t="Include" />
+            <e p="ProductIdWithInternalIdRepository.cs" t="Include" />
             <e p="ProductRepository.cs" t="Include" />
-            <e p="VendorDictionaryRepository.cs" t="Include" />
+            <e p="VendorsWithProductIdRepository.cs" t="Include" />
           </e>
         </e>
         <e p="obj" t="ExcludeRecursive">
@@ -53,6 +53,9 @@
             <e p="IDataStorageProvider.cs" t="Include" />
           </e>
           <e p="StatusCode.cs" t="Include" />
+          <e p="Util" t="Include">
+            <e p="RegistrationType.cs" t="Include" />
+          </e>
         </e>
         <e p="TheNewCSVEditorForLB.csproj" t="IncludeRecursive" />
       </e>

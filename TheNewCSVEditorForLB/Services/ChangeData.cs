@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using TheNewCSVEditorForLB.Data.Models;
 using TheNewCSVEditorForLB.Data.Interfaces;
-using TheNewCSVEditorForLB.Data.Repositories;
 using TheNewCSVEditorForLB.Services.Interfaces;
 
 namespace TheNewCSVEditorForLB.Services
@@ -11,17 +9,17 @@ namespace TheNewCSVEditorForLB.Services
     public class ChangeData : IChangeData
     {
         public IProductRepository Product { get; set; }
-        public IVendorDictionaryRepository Vendors { get; set; }
-        public IIeIdDictionaryRepository IeId { get; set; }
-        public List<VendorDictionary> NewVendors { get; set; }
+        public IVendorsWithProductIdRepository Vendors { get; set; }
+        public IProductIdWithInternalIdRepository IeId { get; set; }
+        public List<VendorsWithProductId> NewVendors { get; set; }
         public List<Product> NewProductId { get; set; }
 
-        public ChangeData(IProductRepository productRepository, IVendorDictionaryRepository vendorDictionary, IIeIdDictionaryRepository ieIdDictionary)
+        public ChangeData(IProductRepository productRepository, IVendorsWithProductIdRepository vendorsWithProductId, IProductIdWithInternalIdRepository ieIdDictionary)
         {
             Product = productRepository;
-            Vendors = vendorDictionary;
+            Vendors = vendorsWithProductId;
             IeId = ieIdDictionary;
-            NewVendors = new List<VendorDictionary>();
+            NewVendors = new List<VendorsWithProductId>();
             NewProductId = new List<Product>();
         }
         public void ChangeFieldVendorIdAndVendorCountry()
@@ -34,7 +32,7 @@ namespace TheNewCSVEditorForLB.Services
                     if (Vendors.VendorDictionary.Exists(x => x.ImportVendorId == item.VendorId))
                         item.VendorId = Vendors.VendorDictionary
                             .Find(x => x.ImportVendorId.Equals(item.VendorId)).CorrectVendorId;
-                    else NewVendors.Add(new VendorDictionary {CorrectVendorId = 0, ImportVendorId = item.VendorId});
+                    else NewVendors.Add(new VendorsWithProductId {CorrectVendorId = 0, ImportVendorId = item.VendorId});
                 }
 
                 StatusCode.StatusOk("Change field VendorId and VendorCountry.");
@@ -88,9 +86,9 @@ namespace TheNewCSVEditorForLB.Services
             {
                 foreach (var item in Product.AllProducts)
                 {
-                    if (IeId.DictionaryID.Exists(x => x.ProductId == item.ProductId))
+                    if (IeId.AllIntarnalId.Exists(x => x.ProductId == item.ProductId))
                     {
-                        item.IeId = IeId.DictionaryID.Find(x => x.ProductId.Equals(item.ProductId)).IeId.ToString();
+                        item.IeId = IeId.AllIntarnalId.Find(x => x.ProductId.Equals(item.ProductId)).IeId.ToString();
                     }
                     else NewProductId.Add(item);
                 }

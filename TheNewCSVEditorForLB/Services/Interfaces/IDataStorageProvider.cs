@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TheNewCSVEditorForLB.Data.Models;
 using CsvHelper.Configuration;
 
 namespace TheNewCSVEditorForLB.Services.Interfaces

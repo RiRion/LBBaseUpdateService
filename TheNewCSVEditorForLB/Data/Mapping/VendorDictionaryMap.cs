@@ -2,7 +2,7 @@ using CsvHelper.Configuration;
 
 namespace TheNewCSVEditorForLB.Data.Models
 {
-    public class VendorDictionaryMap : ClassMap<VendorDictionary>
+    public class VendorDictionaryMap : ClassMap<VendorsWithProductId>
     {
         public VendorDictionaryMap()
         {

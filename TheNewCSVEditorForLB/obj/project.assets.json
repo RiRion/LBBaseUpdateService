@@ -2,7 +2,16 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.0": {
-      "CsvHelper/12.1.3": {
+      "Autofac/4.9.4": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Autofac.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Autofac.dll": {}
+        }
+      },
+      "CsvHelper/12.2.1": {
         "type": "package",
         "dependencies": {
           "Microsoft.CSharp": "4.5.0",
@@ -42,7 +51,7 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Newtonsoft.Json/12.0.3-beta2": {
+      "Newtonsoft.Json/12.0.3": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
@@ -801,14 +810,34 @@
     }
   },
   "libraries": {
-    "CsvHelper/12.1.3": {
-      "sha512": "nJgP86WT5eoepfWvPwE+xUY1RwprBSIa0GPPZxAq5lSptqVsar4WNHnycWSue59JrP6Z/2SdCYAKDqHnJloDpg==",
+    "Autofac/4.9.4": {
+      "sha512": "dYiDG4yoV7GDCoOc66d1sqMmg2gwDyomHKgATuMfhFzYxVpWEltToHVHXI3I9vOEvIXE55S4OZPY0ldiZmZtpA==",
       "type": "package",
-      "path": "csvhelper/12.1.3",
+      "path": "autofac/4.9.4",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "csvhelper.12.1.3.nupkg.sha512",
+        "autofac.4.9.4.nupkg.sha512",
+        "autofac.nuspec",
+        "lib/net45/Autofac.dll",
+        "lib/net45/Autofac.pdb",
+        "lib/net45/Autofac.xml",
+        "lib/netstandard1.1/Autofac.dll",
+        "lib/netstandard1.1/Autofac.pdb",
+        "lib/netstandard1.1/Autofac.xml",
+        "lib/netstandard2.0/Autofac.dll",
+        "lib/netstandard2.0/Autofac.pdb",
+        "lib/netstandard2.0/Autofac.xml"
+      ]
+    },
+    "CsvHelper/12.2.1": {
+      "sha512": "I5TYySBQQWQFEFAFFhN0YUvc1xpTH1A9w/vBdtAwopYKtbgaJ0ExM0j8l4d2mNrP+BSfuHULQEnqmx4N7yBcsA==",
+      "type": "package",
+      "path": "csvhelper/12.2.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "csvhelper.12.2.1.nupkg.sha512",
         "csvhelper.nuspec",
         "lib/net45/CsvHelper.dll",
         "lib/net47/CsvHelper.dll",
@@ -913,10 +942,10 @@
         "runtime.json"
       ]
     },
-    "Newtonsoft.Json/12.0.3-beta2": {
-      "sha512": "CNkBl+FKCsp1Tw7MKCpSOCKfZIElxOOBhG46VnFV2G0hRCC1Cc2UUJDknETNGeymXN1/k6hxd44uGVZvdwyEsQ==",
+    "Newtonsoft.Json/12.0.3": {
+      "sha512": "6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
       "type": "package",
-      "path": "newtonsoft.json/12.0.3-beta2",
+      "path": "newtonsoft.json/12.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -939,7 +968,7 @@
         "lib/portable-net40+sl5+win8+wp8+wpa81/Newtonsoft.Json.xml",
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.dll",
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.xml",
-        "newtonsoft.json.12.0.3-beta2.nupkg.sha512",
+        "newtonsoft.json.12.0.3.nupkg.sha512",
         "newtonsoft.json.nuspec",
         "packageIcon.png"
       ]
@@ -3008,8 +3037,9 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.0": [
-      "CsvHelper >= 12.1.3",
-      "Newtonsoft.Json >= 12.0.3-beta2",
+      "Autofac >= 4.9.4",
+      "CsvHelper >= 12.2.1",
+      "Newtonsoft.Json >= 12.0.3",
       "System.Net.Http >= 4.3.4"
     ]
   },
@@ -3052,13 +3082,17 @@
     "frameworks": {
       "netcoreapp3.0": {
         "dependencies": {
+          "Autofac": {
+            "target": "Package",
+            "version": "[4.9.4, )"
+          },
           "CsvHelper": {
             "target": "Package",
-            "version": "[12.1.3, )"
+            "version": "[12.2.1, )"
           },
           "Newtonsoft.Json": {
             "target": "Package",
-            "version": "[12.0.3-beta2, )"
+            "version": "[12.0.3, )"
           },
           "System.Net.Http": {
             "target": "Package",
@@ -3074,13 +3108,7 @@
           "net48"
         ],
         "assetTargetFallback": true,
-        "warn": true,
-        "frameworkReferences": {
-          "Microsoft.NETCore.App": {
-            "privateAssets": "all"
-          }
-        },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.0.100/RuntimeIdentifierGraph.json"
+        "warn": true
       }
     }
   }

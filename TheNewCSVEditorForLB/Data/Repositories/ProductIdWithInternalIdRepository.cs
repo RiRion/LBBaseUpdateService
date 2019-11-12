@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using TheNewCSVEditorForLB.Data.Models;
 using TheNewCSVEditorForLB.Data.Interfaces;
@@ -7,11 +6,11 @@ using Newtonsoft.Json;
 
 namespace TheNewCSVEditorForLB.Data.Repositories
 {
-    public class IeIdDictionaryRepository : IIeIdDictionaryRepository
+    public class ProductIdWithInternalIdRepository : IProductIdWithInternalIdRepository
     {
-        public List<IeIdDictionary> DictionaryID { get; private set; }
+        public List<ProductIdWithIntarnalId> AllIntarnalId { get; private set; }
             
-        public bool GetFromServer(string path)
+        public bool GetInternalIdFromServer(string path)
         {
             using (var client = new HttpClient())
             {
@@ -19,7 +18,7 @@ namespace TheNewCSVEditorForLB.Data.Repositories
                 if (resp.IsSuccessStatusCode)
                 {
                     string str = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                    DictionaryID = JsonConvert.DeserializeObject<List<IeIdDictionary>>(str);
+                    AllIntarnalId = JsonConvert.DeserializeObject<List<ProductIdWithIntarnalId>>(str);
                 }
 
                 return resp.IsSuccessStatusCode;

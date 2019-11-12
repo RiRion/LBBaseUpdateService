@@ -6,6 +6,7 @@ using TheNewCSVEditorForLB.Data.Models;
 using TheNewCSVEditorForLB.Data.Repositories;
 using TheNewCSVEditorForLB.Services;
 using TheNewCSVEditorForLB.Services.Interfaces;
+using Autofac;
 
 namespace TheNewCSVEditorForLB 
 {
@@ -18,49 +19,51 @@ namespace TheNewCSVEditorForLB
             string basePath = Console.ReadLine();
             Console.Write("Path to VendorsDictionary.csv: ");
             string vendorDicPath = Console.ReadLine();
+            
+            basePath = "/Users/Anton/Projects/TheNewCSVEditorForLB/input/bitrix.csv";
+            vendorDicPath = "/Users/Anton/Projects/TheNewCSVEditorForLB/input/VendorsDictionary.csv";
+
             Execute(basePath, vendorDicPath);
         }
 
         static void Execute(string basePath, string vendorDicPath)
         {
+            var container = Services.Util.RegistrationType.GetContainer();
+            
             IDataStorageProvider<Product> provider = new DataStorageProvider<Product>(basePath);
-            IDataStorageProvider<VendorDictionary> providerDictionary = new DataStorageProvider<VendorDictionary>(vendorDicPath);
-            IProductRepository product = new ProductRepository();
-            IVendorDictionaryRepository vendorDictionary = new VendorDictionaryRepository();
-            IIeIdDictionaryRepository ieId = new IeIdDictionaryRepository();
+            IDataStorageProvider<VendorsWithProductId> providerDictionary = new DataStorageProvider<VendorsWithProductId>(vendorDicPath);
+            var product = container.Resolve<IProductRepository>();
+            var listVendorsWithProductId = container.Resolve<IVendorsWithProductIdRepository>();
+            var productIdWithInternalId = container.Resolve<IProductIdWithInternalIdRepository>();
             product.AddMany(provider.ReadData<ProductMap>());
-            vendorDictionary.AddMany(providerDictionary.ReadData<VendorDictionaryMap>());
-            
-            IChangeData changeData = new ChangeData(product, vendorDictionary, ieId);
-            List<Task> tasks = new List<Task>();
-            tasks.Add(Task.Factory.StartNew(changeData.ChangeFieldVendorIdAndVendorCountry));
-            tasks.Add(Task.Factory.StartNew(changeData.ChangeFieldVibration));
-            tasks.Add(Task.Factory.StartNew(changeData.ChangeFieldNewAndBest));
+            listVendorsWithProductId.AddMany(providerDictionary.ReadData<VendorDictionaryMap>());
+            productIdWithInternalId.GetInternalIdFromServer("https://loveberi.ru/bitrix/my_tools/getDictionaryId.php");
 
-            if (ieId.GetFromServer("https://loveberi.ru/bitrix/my_tools/getDictionaryId.php"))
+
+            IChangeData changeData = new ChangeData(product, listVendorsWithProductId, productIdWithInternalId);
+            var tasks = new List<Task>
             {
-                StatusCode.StatusOk("Connect to Loveberi.ru. Downloading IeIdDictionary.");
-                tasks.Add(Task.Factory.StartNew(changeData.ChangeFieldIeId));
-            }
-            else StatusCode.StatusFalse("No connection to server: https://loveberi.ru/bitrix/my_tools/getDictionaryId.php");
+                Task.Factory.StartNew(changeData.ChangeFieldVendorIdAndVendorCountry),
+                Task.Factory.StartNew(changeData.ChangeFieldVibration),
+                Task.Factory.StartNew(changeData.ChangeFieldNewAndBest),
+                Task.Factory.StartNew(changeData.ChangeFieldIeId)
+            };
 
-            
-            
-            
             Task.WaitAll(tasks.ToArray());
+
             if (changeData.NewVendors.Count != 0)
             {
-                providerDictionary.WriteData(changeData.NewVendors, "new_vendors.csv");
+                providerDictionary.WriteData(changeData.NewVendors, "/new_vendors.csv");
                 Console.WriteLine("\nNew vendor ID found. new_vendors.csv was created.");
             }
             
             if (changeData.NewProductId.Count != 0)
             {
-                provider.WriteData(changeData.NewProductId, "new_productId.csv");
+                provider.WriteData(changeData.NewProductId, "/new_productId.csv");
                 Console.WriteLine("\nNew product ID found. new_productId.csv was created.");
             }
             
-            provider.WriteData(product.AllProducts, "new_base.csv");
+            provider.WriteData(product.AllProducts, "/new_base.csv");
         }
     }
 }

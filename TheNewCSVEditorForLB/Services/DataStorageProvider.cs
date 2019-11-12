@@ -14,8 +14,11 @@ namespace TheNewCSVEditorForLB.Services
 
         public DataStorageProvider(string path)
         {
-            ReadPath = path;
-            WritePath = path.Substring(0, path.Length - path.Substring(path.LastIndexOf('/')).Length + 1);
+            if (File.Exists(path))
+            {
+                ReadPath = path;
+                WritePath = Directory.GetParent(path).FullName;
+            }
         }
 
         public List<T> ReadData<TMap>() where TMap : ClassMap

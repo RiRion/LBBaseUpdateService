@@ -12,3 +12,4 @@
 /Users/Anton/Projects/TheNewCSVEditorForLB/TheNewCSVEditorForLB/obj/Debug/netcoreapp3.0/TheNewCSVEditorForLB.dll
 /Users/Anton/Projects/TheNewCSVEditorForLB/TheNewCSVEditorForLB/obj/Debug/netcoreapp3.0/TheNewCSVEditorForLB.pdb
 /Users/Anton/Projects/TheNewCSVEditorForLB/TheNewCSVEditorForLB/bin/Debug/netcoreapp3.0/Newtonsoft.Json.dll
+/Users/Anton/Projects/TheNewCSVEditorForLB/TheNewCSVEditorForLB/bin/Debug/netcoreapp3.0/Autofac.dll

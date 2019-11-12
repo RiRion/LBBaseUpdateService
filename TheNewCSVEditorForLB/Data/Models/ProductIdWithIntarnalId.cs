@@ -1,6 +1,6 @@
 namespace TheNewCSVEditorForLB.Data.Models
 {
-    public class IeIdDictionary
+    public class ProductIdWithIntarnalId
     {
         public int ProductId { get; set; }
         public int IeId { get; set; }

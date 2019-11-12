@@ -8,15 +8,24 @@
     ".NETCoreApp,Version=v3.0": {
       "TheNewCSVEditorForLB/1.0.0": {
         "dependencies": {
-          "CsvHelper": "12.1.3",
-          "Newtonsoft.Json": "12.0.3-beta2",
+          "Autofac": "4.9.4",
+          "CsvHelper": "12.2.1",
+          "Newtonsoft.Json": "12.0.3",
           "System.Net.Http": "4.3.4"
         },
         "runtime": {
           "TheNewCSVEditorForLB.dll": {}
         }
       },
-      "CsvHelper/12.1.3": {
+      "Autofac/4.9.4": {
+        "runtime": {
+          "lib/netstandard2.0/Autofac.dll": {
+            "assemblyVersion": "4.9.4.0",
+            "fileVersion": "4.9.4.0"
+          }
+        }
+      },
+      "CsvHelper/12.2.1": {
         "dependencies": {
           "Microsoft.CSharp": "4.5.0",
           "System.Reflection.TypeExtensions": "4.4.0"
@@ -24,18 +33,18 @@
         "runtime": {
           "lib/netstandard2.0/CsvHelper.dll": {
             "assemblyVersion": "12.0.0.0",
-            "fileVersion": "12.1.3.0"
+            "fileVersion": "12.2.1.0"
           }
         }
       },
       "Microsoft.CSharp/4.5.0": {},
       "Microsoft.NETCore.Platforms/1.1.1": {},
       "Microsoft.NETCore.Targets/1.1.0": {},
-      "Newtonsoft.Json/12.0.3-beta2": {
+      "Newtonsoft.Json/12.0.3": {
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
             "assemblyVersion": "12.0.0.0",
-            "fileVersion": "12.0.3.23806"
+            "fileVersion": "12.0.3.23909"
           }
         }
       },
@@ -438,12 +447,19 @@
       "serviceable": false,
       "sha512": ""
     },
-    "CsvHelper/12.1.3": {
+    "Autofac/4.9.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-nJgP86WT5eoepfWvPwE+xUY1RwprBSIa0GPPZxAq5lSptqVsar4WNHnycWSue59JrP6Z/2SdCYAKDqHnJloDpg==",
-      "path": "csvhelper/12.1.3",
-      "hashPath": "csvhelper.12.1.3.nupkg.sha512"
+      "sha512": "sha512-dYiDG4yoV7GDCoOc66d1sqMmg2gwDyomHKgATuMfhFzYxVpWEltToHVHXI3I9vOEvIXE55S4OZPY0ldiZmZtpA==",
+      "path": "autofac/4.9.4",
+      "hashPath": "autofac.4.9.4.nupkg.sha512"
+    },
+    "CsvHelper/12.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-I5TYySBQQWQFEFAFFhN0YUvc1xpTH1A9w/vBdtAwopYKtbgaJ0ExM0j8l4d2mNrP+BSfuHULQEnqmx4N7yBcsA==",
+      "path": "csvhelper/12.2.1",
+      "hashPath": "csvhelper.12.2.1.nupkg.sha512"
     },
     "Microsoft.CSharp/4.5.0": {
       "type": "package",
@@ -466,12 +482,12 @@
       "path": "microsoft.netcore.targets/1.1.0",
       "hashPath": "microsoft.netcore.targets.1.1.0.nupkg.sha512"
     },
-    "Newtonsoft.Json/12.0.3-beta2": {
+    "Newtonsoft.Json/12.0.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-CNkBl+FKCsp1Tw7MKCpSOCKfZIElxOOBhG46VnFV2G0hRCC1Cc2UUJDknETNGeymXN1/k6hxd44uGVZvdwyEsQ==",
-      "path": "newtonsoft.json/12.0.3-beta2",
-      "hashPath": "newtonsoft.json.12.0.3-beta2.nupkg.sha512"
+      "sha512": "sha512-6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
+      "path": "newtonsoft.json/12.0.3",
+      "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {
       "type": "package",
