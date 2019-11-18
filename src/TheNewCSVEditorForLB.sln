@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheNewCSVEditorForLB", "TheNewCSVEditorForLB\TheNewCSVEditorForLB.csproj", "{2010E700-83B0-46FF-AFD7-69EAC358CBCF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{1732DAED-DA1C-4898-B4CB-A5310F1314C0}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+		..\clean-with-scc.bat = ..\clean-with-scc.bat
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2010E700-83B0-46FF-AFD7-69EAC358CBCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2010E700-83B0-46FF-AFD7-69EAC358CBCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2010E700-83B0-46FF-AFD7-69EAC358CBCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2010E700-83B0-46FF-AFD7-69EAC358CBCF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4A5622F6-D2BC-4156-ACA5-0068EE138FD6}
+	EndGlobalSection
+EndGlobal
