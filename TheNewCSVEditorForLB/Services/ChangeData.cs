@@ -10,15 +10,15 @@ namespace TheNewCSVEditorForLB.Services
     {
         public IProductRepository Product { get; set; }
         public IVendorsWithProductIdRepository Vendors { get; set; }
-        public IProductIdWithInternalIdRepository IeId { get; set; }
+        public IProductIdWithInternalIdRepository ProductIdWithInternalId { get; set; }
         public List<VendorsWithProductId> NewVendors { get; set; }
         public List<Product> NewProductId { get; set; }
 
-        public ChangeData(IProductRepository productRepository, IVendorsWithProductIdRepository vendorsWithProductId, IProductIdWithInternalIdRepository ieIdDictionary)
+        public ChangeData(IProductRepository productRepository, IVendorsWithProductIdRepository vendorsWithProductId, IProductIdWithInternalIdRepository productWithInternalId)
         {
             Product = productRepository;
             Vendors = vendorsWithProductId;
-            IeId = ieIdDictionary;
+            ProductIdWithInternalId = productWithInternalId;
             NewVendors = new List<VendorsWithProductId>();
             NewProductId = new List<Product>();
         }
@@ -29,8 +29,8 @@ namespace TheNewCSVEditorForLB.Services
                 foreach (var item in Product.AllProducts)
                 {
                     item.VendorCountry = item.VendorId;
-                    if (Vendors.VendorDictionary.Exists(x => x.ImportVendorId == item.VendorId))
-                        item.VendorId = Vendors.VendorDictionary
+                    if (Vendors.AllVendorsWithProductId.Exists(x => x.ImportVendorId == item.VendorId))
+                        item.VendorId = Vendors.AllVendorsWithProductId
                             .Find(x => x.ImportVendorId.Equals(item.VendorId)).CorrectVendorId;
                     else NewVendors.Add(new VendorsWithProductId {CorrectVendorId = 0, ImportVendorId = item.VendorId});
                 }
@@ -86,9 +86,9 @@ namespace TheNewCSVEditorForLB.Services
             {
                 foreach (var item in Product.AllProducts)
                 {
-                    if (IeId.AllIntarnalId.Exists(x => x.ProductId == item.ProductId))
+                    if (ProductIdWithInternalId.AllIntarnalId.Exists(x => x.ProductId == item.ProductId))
                     {
-                        item.IeId = IeId.AllIntarnalId.Find(x => x.ProductId.Equals(item.ProductId)).IeId.ToString();
+                        item.IeId = ProductIdWithInternalId.AllIntarnalId.Find(x => x.ProductId.Equals(item.ProductId)).IeId.ToString();
                     }
                     else NewProductId.Add(item);
                 }

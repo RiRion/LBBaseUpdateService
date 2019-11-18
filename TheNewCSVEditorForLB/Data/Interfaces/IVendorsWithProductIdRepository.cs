@@ -5,7 +5,7 @@ namespace TheNewCSVEditorForLB.Data.Interfaces
 {
     public interface IVendorsWithProductIdRepository
     {
-        List<VendorsWithProductId> VendorDictionary { get; set; }
+        List<VendorsWithProductId> AllVendorsWithProductId { get; set; }
         void AddMany(List<VendorsWithProductId> list);
         void AddVendorId(int correctVendorId, int importVendorId);
     }

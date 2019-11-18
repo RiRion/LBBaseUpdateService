@@ -7,14 +7,15 @@ using TheNewCSVEditorForLB.Services.Interfaces;
 
 namespace TheNewCSVEditorForLB.Services.Util
 {
-    public static class RegistrationType
+    public class RegistrationType
     {
         public static void RegistrTypes(ContainerBuilder builder)
         {
-            builder.RegisterType<ProductRepository>().As<IProductRepository>();
+            builder.RegisterType<ProductRepository>().AsImplementedInterfaces();
             builder.RegisterType<VendorsWithProductIdRepository>().As<IVendorsWithProductIdRepository>();
             builder.RegisterType<ProductIdWithInternalIdRepository>().As<IProductIdWithInternalIdRepository>();
             builder.RegisterType<ChangeData>().As<IChangeData>();
+            builder.RegisterType<DataStorageProvider>().As<IDataStorageProvider>();
         }
 
         public static IContainer GetContainer()

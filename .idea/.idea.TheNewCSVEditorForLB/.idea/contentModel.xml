@@ -9,7 +9,7 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="Data" t="Include">
           <e p="Interfaces" t="Include">
-            <e p="IIeIdDictionaryRepository.cs" t="Include" />
+            <e p="IProductIdWithInternalIdRepository.cs" t="Include" />
             <e p="IProductRepository.cs" t="Include" />
             <e p="IVendorsWithProductIdRepository.cs" t="Include" />
           </e>
@@ -17,7 +17,7 @@
             <e p="CategoriesMap.cs" t="Include" />
             <e p="ImagesMap.cs" t="Include" />
             <e p="ProductMap.cs" t="Include" />
-            <e p="VendorDictionaryMap.cs" t="Include" />
+            <e p="VendorsWithProductIdMap.cs" t="Include" />
           </e>
           <e p="Models" t="Include">
             <e p="Categories.cs" t="Include" />
@@ -43,8 +43,8 @@
         <e p="Services" t="Include">
           <e p="ChangeData.cs" t="Include" />
           <e p="Comparators" t="Include">
-            <e p="IEIDDictionaryComp.cs" t="Include" />
             <e p="ProductComp.cs" t="Include" />
+            <e p="ProductIdWithInternalIdComp.cs" t="Include" />
             <e p="VendorDictionaryComp.cs" t="Include" />
           </e>
           <e p="DataStorageProvider.cs" t="Include" />

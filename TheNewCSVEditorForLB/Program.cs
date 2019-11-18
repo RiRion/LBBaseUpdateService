@@ -7,11 +7,13 @@ using TheNewCSVEditorForLB.Data.Repositories;
 using TheNewCSVEditorForLB.Services;
 using TheNewCSVEditorForLB.Services.Interfaces;
 using Autofac;
+using TheNewCSVEditorForLB.Services.Util;
 
 namespace TheNewCSVEditorForLB 
 {
     class Program
     {
+        //должен создавать файл с новыми продуктами и файл с обновленными ппродуктами
         static void Main(string[] args)
         {
             Console.Clear();
@@ -28,17 +30,18 @@ namespace TheNewCSVEditorForLB
 
         static void Execute(string basePath, string vendorDicPath)
         {
-            var container = Services.Util.RegistrationType.GetContainer();
+            var container = RegistrationType.GetContainer();
             
-            IDataStorageProvider<Product> provider = new DataStorageProvider<Product>(basePath);
-            IDataStorageProvider<VendorsWithProductId> providerDictionary = new DataStorageProvider<VendorsWithProductId>(vendorDicPath);
+            var provider = new DataStorageProvider(basePath, vendorDicPath);
+            //var provider = container.Resolve<IDataStorageProvider>();
             var product = container.Resolve<IProductRepository>();
             var listVendorsWithProductId = container.Resolve<IVendorsWithProductIdRepository>();
             var productIdWithInternalId = container.Resolve<IProductIdWithInternalIdRepository>();
-            product.AddMany(provider.ReadData<ProductMap>());
-            listVendorsWithProductId.AddMany(providerDictionary.ReadData<VendorDictionaryMap>());
+            product.AddMany(provider.ReadProductBase());
+            //product.AddMany(container.Resolve<DataStorageProvider>().ReadProductBase());
+            listVendorsWithProductId.AddMany(provider.ReadListVendorsWithProductId());
             productIdWithInternalId.GetInternalIdFromServer("https://loveberi.ru/bitrix/my_tools/getDictionaryId.php");
-
+            
 
             IChangeData changeData = new ChangeData(product, listVendorsWithProductId, productIdWithInternalId);
             var tasks = new List<Task>
@@ -53,7 +56,7 @@ namespace TheNewCSVEditorForLB
 
             if (changeData.NewVendors.Count != 0)
             {
-                providerDictionary.WriteData(changeData.NewVendors, "/new_vendors.csv");
+                provider.WriteData(changeData.NewVendors, "/new_vendors.csv");
                 Console.WriteLine("\nNew vendor ID found. new_vendors.csv was created.");
             }
             

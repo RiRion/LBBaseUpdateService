@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using CsvHelper.Configuration;
+using TheNewCSVEditorForLB.Data.Models;
 
 namespace TheNewCSVEditorForLB.Services.Interfaces
 {
-    public interface IDataStorageProvider<T>
+    public interface IDataStorageProvider
     {
-        string ReadPath { get; set; }
-        string WritePath { get; set; }
-        List<T> ReadData<TMap>() where TMap : ClassMap;
-        void WriteData(List<T> products, string name);
+        string ProductBasePath { get; }
+        string VendorsWithProductIdPath { get; }
+        string WritePath { get; }
+        List<Product> ReadProductBase();
+        List<VendorsWithProductId> ReadListVendorsWithProductId();
+        void WriteData<T>(List<T> list, string name);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using TheNewCSVEditorForLB.Data.Models;
@@ -10,7 +11,7 @@ namespace TheNewCSVEditorForLB.Data.Repositories
     {
         public List<ProductIdWithIntarnalId> AllIntarnalId { get; private set; }
             
-        public bool GetInternalIdFromServer(string path)
+        public void GetInternalIdFromServer(string path)
         {
             using (var client = new HttpClient())
             {
@@ -20,8 +21,7 @@ namespace TheNewCSVEditorForLB.Data.Repositories
                     string str = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                     AllIntarnalId = JsonConvert.DeserializeObject<List<ProductIdWithIntarnalId>>(str);
                 }
-
-                return resp.IsSuccessStatusCode;
+                else throw new Exception("Connection failed.");
             }
         }
     }

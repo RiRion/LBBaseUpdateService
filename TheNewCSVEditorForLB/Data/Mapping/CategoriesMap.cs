@@ -1,6 +1,7 @@
 using CsvHelper.Configuration;
+using TheNewCSVEditorForLB.Data.Models;
 
-namespace TheNewCSVEditorForLB.Data.Models
+namespace TheNewCSVEditorForLB.Data.Mapping
 {
     public class CategoriesMap : ClassMap<Categories>
     {

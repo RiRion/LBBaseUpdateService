@@ -7,21 +7,21 @@ namespace TheNewCSVEditorForLB.Data.Repositories
 {
     public class VendorsWithProductIdRepository : IVendorsWithProductIdRepository
     {
-        public List<VendorsWithProductId> VendorDictionary { get; set; }
+        public List<VendorsWithProductId> AllVendorsWithProductId { get; set; }
 
         public VendorsWithProductIdRepository()
         {
-            VendorDictionary = new List<VendorsWithProductId>();
+            AllVendorsWithProductId = new List<VendorsWithProductId>();
         }
         public void AddMany(List<VendorsWithProductId> list)
         {
-            VendorDictionary.AddRange(list);
+            AllVendorsWithProductId.AddRange(list);
         }
 
         public void AddVendorId(int correctVendorId, int importVendorId)
         {
-            VendorDictionary.Add(new VendorsWithProductId{CorrectVendorId = correctVendorId, ImportVendorId = importVendorId});
-            VendorDictionary.Sort(new VendorDictionaryComp());
+            AllVendorsWithProductId.Add(new VendorsWithProductId{CorrectVendorId = correctVendorId, ImportVendorId = importVendorId});
+            AllVendorsWithProductId.Sort(new VendorDictionaryComp());
         }
     }
 }
