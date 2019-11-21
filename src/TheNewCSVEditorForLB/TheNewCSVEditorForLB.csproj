@@ -20,9 +20,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="CsvHelper" Version="12.2.1" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
       <PackageReference Include="System.Net.Http" Version="4.3.4" />
       <PackageReference Include="Autofac" Version="4.9.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TheNewCSVEditorForLB.BusinessLogic\TheNewCSVEditorForLB.BusinessLogic.csproj" />
     </ItemGroup>
 </Project>
