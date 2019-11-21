@@ -1,12 +1,13 @@
 ﻿using Autofac;
+using Microsoft.Extensions.DependencyModel;
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using TheNewCSVEditorForLB.BusinessLogic.ExternalClients.LoveBeri.Models.Config;
-using TheNewCSVEditorForLB.BusinessLogic.Services;
+using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Config;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Exceptions;
-using TheNewCSVEditorForLB.Models.Config;
-using DataSourceDto = TheNewCSVEditorForLB.Models.DataSourceDto;
 
 namespace TheNewCSVEditorForLB
 {
@@ -36,28 +37,29 @@ namespace TheNewCSVEditorForLB
 				{
 					new NamedParameter("test", "test")
 				});
-			builder.RegisterType<EntityUpdater>().AsImplementedInterfaces();
-			builder.RegisterInstance(new ApplicationConfig()
-			{
-				Test = "test"
-			});
-			builder.RegisterInstance(GetDataSource()).AsSelf();
+			builder.RegisterInstance(CreateConfig());
 			builder.RegisterInstance(new LoveBeriClientConfig()
 			{
 				BaseUrl = "https://loveberi.ru"
-			}).AsSelf();
+			});
+			builder.RegisterAssemblyModules(LoadAssemblies("BusinessLogic"));
 
 			return builder.Build();
 		}
-		private static DataSourceDto GetDataSource()
+		private static ApplicationConfig CreateConfig()
 		{
 #if DEBUG
-			return GetTestDataSource();
+			var applicationConfig = GetTestDataSource();
 #else
-			return GetUserDataSource();
+			var applicationConfig = GetUserDataSource();
 #endif
+			applicationConfig.NewProductsFilePath = Path.Combine(Directory.GetParent(applicationConfig.BitrixFilePath).FullName, "new_productId.csv");
+			applicationConfig.NewBaseFilePath = Path.Combine(Directory.GetParent(applicationConfig.BitrixFilePath).FullName, "new_base.csv");
+			applicationConfig.NewVendorsFilePath = Path.Combine(Directory.GetParent(applicationConfig.VendorsFilePath).FullName, "new_vendors.csv");
+
+			return applicationConfig;
 		}
-		private static DataSourceDto GetTestDataSource()
+		private static ApplicationConfig GetTestDataSource()
 		{
 			const String bitrixDefaultFilePath = "TestData/Bitrix.csv";
 			if(!File.Exists(bitrixDefaultFilePath))
@@ -67,13 +69,13 @@ namespace TheNewCSVEditorForLB
 			if(!File.Exists(vendorDictionaryDefaultFilePath))
 				throw new DataFileNotFoundException($"File {vendorDictionaryDefaultFilePath} was not found!");
 
-			return new DataSourceDto()
+			return new ApplicationConfig()
 			{
 				BitrixFilePath = bitrixDefaultFilePath,
-				VendorDictionaryFilePath = vendorDictionaryDefaultFilePath
+				VendorsFilePath = vendorDictionaryDefaultFilePath
 			};
 		}
-		private static DataSourceDto GetUserDataSource()
+		private static ApplicationConfig GetUserDataSource()
 		{
 			Console.Clear();
 			Console.Write("Path to base.csv: ");
@@ -87,11 +89,18 @@ namespace TheNewCSVEditorForLB
 			if(!File.Exists(vendorDictionaryFilePath))
 				throw new DataFileNotFoundException($"File {vendorDictionaryFilePath} was not found!");
 
-			return new DataSourceDto()
+			return new ApplicationConfig()
 			{
 				BitrixFilePath = bitrixFilePath,
-				VendorDictionaryFilePath = vendorDictionaryFilePath
+				VendorsFilePath = vendorDictionaryFilePath
 			};
+		}
+		public static Assembly[] LoadAssemblies(String partOfName)
+		{
+			return DependencyContext.Default.CompileLibraries
+				.Where(d => d.Name.Contains(partOfName))
+				.Select(p => Assembly.Load(new AssemblyName(p.Name)))
+				.ToArray();
 		}
 	}
 }

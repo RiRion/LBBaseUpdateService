@@ -6,7 +6,7 @@ using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Storage;
 
 namespace TheNewCSVEditorForLB.BusinessLogic.Services
 {
-	public class EntityUpdater : IEntityUpdater
+	public class EntityUpdaterService : IEntityUpdater
 	{
 		// IEntityUpdater ////////////////////////////////////////////////////////////////////////////
 		public VendorsWithProductId[] ChangeFieldVendorIdAndVendorCountry(Product[] products, VendorsWithProductId[] vendors)
