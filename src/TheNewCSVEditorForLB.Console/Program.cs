@@ -9,7 +9,7 @@ using TheNewCSVEditorForLB.BusinessLogic.ExternalClients.LoveBeri.Models.Config;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Config;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Exceptions;
 
-namespace TheNewCSVEditorForLB
+namespace TheNewCSVEditorForLB.Console
 {
 	class Program
 	{
@@ -77,11 +77,11 @@ namespace TheNewCSVEditorForLB
 		}
 		private static ApplicationConfig GetUserDataSource()
 		{
-			Console.Clear();
-			Console.Write("Path to base.csv: ");
-			var bitrixFilePath = Console.ReadLine();
-			Console.Write("Path to VendorsDictionary.csv: ");
-			var vendorDictionaryFilePath = Console.ReadLine();
+			System.Console.Clear();
+			System.Console.Write("Path to base.csv: ");
+			var bitrixFilePath = System.Console.ReadLine();
+			System.Console.Write("Path to VendorsDictionary.csv: ");
+			var vendorDictionaryFilePath = System.Console.ReadLine();
 
 			if(!File.Exists(bitrixFilePath))
 				throw new DataFileNotFoundException($"File {bitrixFilePath} was not found!");
