@@ -53,8 +53,10 @@ namespace TheNewCSVEditorForLB.Headless
 #else
 			var applicationConfig = GetUserDataSource();
 #endif
-			applicationConfig.NewProductsFilePath = Path.Combine(Directory.GetParent(applicationConfig.BitrixFilePath).FullName, "new_productId.csv");
-			applicationConfig.NewBaseFilePath = Path.Combine(Directory.GetParent(applicationConfig.BitrixFilePath).FullName, "new_base.csv");
+			var bitrixParentDirectory = Directory.GetParent(applicationConfig.BitrixFilePath).FullName;
+
+			applicationConfig.NewProductsFilePath = Path.Combine(bitrixParentDirectory, "new_productId.csv");
+			applicationConfig.NewBaseFilePath = Path.Combine(bitrixParentDirectory, "new_base.csv");
 			applicationConfig.NewVendorsFilePath = Path.Combine(Directory.GetParent(applicationConfig.VendorsFilePath).FullName, "new_vendors.csv");
 
 			return applicationConfig;
