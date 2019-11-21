@@ -5,7 +5,7 @@ using TheNewCSVEditorForLB.BusinessLogic.ExternalClients.LoveBeri.Interfaces;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Interfaces;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Config;
 
-namespace TheNewCSVEditorForLB.Console
+namespace TheNewCSVEditorForLB.Headless
 {
 	internal sealed class ApplicationContext : IDisposable
 	{
@@ -42,7 +42,7 @@ namespace TheNewCSVEditorForLB.Console
 			{
 				_dataStorageService.SaveVendors(newVendors, _config.NewVendorsFilePath);
 
-				System.Console.WriteLine("New vendor ID found. new_vendors.csv was created.\r\n");
+				Console.WriteLine("New vendor ID found. new_vendors.csv was created.\r\n");
 			}
 
 			var ieId = await _loveBeriClient.GetInternalIdAsync();
@@ -51,7 +51,7 @@ namespace TheNewCSVEditorForLB.Console
 			{
 				_dataStorageService.SaveProducts(newProducts, _config.NewProductsFilePath);
 
-				System.Console.WriteLine("New product ID found. new_productId.csv was created.\r\n");
+				Console.WriteLine("New product ID found. new_productId.csv was created.\r\n");
 			}
 
 			_entityUpdater.ChangeFieldVibration(products);

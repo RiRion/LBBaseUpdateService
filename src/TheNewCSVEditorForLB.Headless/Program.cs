@@ -9,7 +9,7 @@ using TheNewCSVEditorForLB.BusinessLogic.ExternalClients.LoveBeri.Models.Config;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Config;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Exceptions;
 
-namespace TheNewCSVEditorForLB.Console
+namespace TheNewCSVEditorForLB.Headless
 {
 	class Program
 	{
