@@ -1,12 +1,9 @@
 ﻿using Autofac;
-using Newtonsoft.Json;
 using System;
 using System.IO;
-using System.Net.Http;
 using System.Threading.Tasks;
+using TheNewCSVEditorForLB.BusinessLogic.ExternalClients.LoveBeri.Interfaces;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Interfaces;
-using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Exceptions;
-using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Storage;
 using TheNewCSVEditorForLB.Models;
 using TheNewCSVEditorForLB.Models.Config;
 
@@ -22,6 +19,7 @@ namespace TheNewCSVEditorForLB
 		private readonly IDataStorageService _dataStorageService;
 		private readonly IEntityUpdater _entityUpdater;
 		private readonly DataSourceDto _dataSource;
+		private readonly ILoveBeriClient _loveBeriClient;
 
 
 		public ApplicationContext(
@@ -32,7 +30,7 @@ namespace TheNewCSVEditorForLB
 			String test,
 			IDataStorageService dataStorageService,
 			IEntityUpdater entityUpdater,
-			DataSourceDto dataSource)
+			DataSourceDto dataSource, ILoveBeriClient loveBeriClient)
 		{
 			_lifetimeScope = lifetimeScope;
 			_vendorsWithProductIdRepository = vendorsWithProductIdRepository;
@@ -42,6 +40,7 @@ namespace TheNewCSVEditorForLB
 			_dataStorageService = dataStorageService;
 			_entityUpdater = entityUpdater;
 			_dataSource = dataSource;
+			_loveBeriClient = loveBeriClient;
 		}
 
 
@@ -62,7 +61,7 @@ namespace TheNewCSVEditorForLB
 				Console.WriteLine("\nNew vendor ID found. new_vendors.csv was created.");
 			}
 
-			var ieId = await GetInternalIdAsync();
+			var ieId = await _loveBeriClient.GetInternalIdAsync();
 			var newProducts = _entityUpdater.ChangeFieldIeId(products, ieId);
 			if(newProducts.Length > 0)
 			{
@@ -87,20 +86,6 @@ namespace TheNewCSVEditorForLB
 		public void Dispose()
 		{
 			_lifetimeScope?.Dispose();
-		}
-
-
-		// SUPPORT FUNCTIONS //////////////////////////////////////////////////////////////////////
-		public async Task<ProductIdWithIntarnalId[]> GetInternalIdAsync()
-		{
-			using(var client = new HttpClient())
-			{
-				var response = await client.GetAsync("https://loveberi.ru/bitrix/my_tools/getDictionaryId.php");
-				if(!response.IsSuccessStatusCode)
-					throw new ExternalIdRetrievalException($"Status code {response.StatusCode}, message: {await response.Content.ReadAsStringAsync()}");
-
-				return JsonConvert.DeserializeObject<ProductIdWithIntarnalId[]>(await response.Content.ReadAsStringAsync());
-			}
 		}
 	}
 }

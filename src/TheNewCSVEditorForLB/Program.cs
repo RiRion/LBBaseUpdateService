@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using TheNewCSVEditorForLB.BusinessLogic.ExternalClients.LoveBeri.Models.Config;
 using TheNewCSVEditorForLB.BusinessLogic.Services;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Exceptions;
 using TheNewCSVEditorForLB.Models.Config;
@@ -41,6 +42,10 @@ namespace TheNewCSVEditorForLB
 				Test = "test"
 			});
 			builder.RegisterInstance(GetDataSource()).AsSelf();
+			builder.RegisterInstance(new LoveBeriClientConfig()
+			{
+				BaseUrl = "https://loveberi.ru"
+			}).AsSelf();
 
 			return builder.Build();
 		}
