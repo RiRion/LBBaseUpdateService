@@ -28,7 +28,7 @@ namespace TheNewCSVEditorForLB.BusinessLogic.DependencyInjection
 
 			builder
 				.RegisterAssemblyTypes(_currentAssembly)
-				.Where(p => p.IsClass && p.Name.EndsWith("Service"))
+				.Where(p => p.Name.EndsWith("Service"))
 				.AsSelf()
 				.AsImplementedInterfaces();
 		}

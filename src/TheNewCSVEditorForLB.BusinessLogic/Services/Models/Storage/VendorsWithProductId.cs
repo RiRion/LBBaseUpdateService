@@ -7,6 +7,7 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Services.Models.Storage
 	{
 		[Name("CorrectVendorId")]
 		public Int32 CorrectVendorId { get; set; }
+
 		[Name("ImportVendorId")]
 		public Int32 ImportVendorId { get; set; }
 	}
