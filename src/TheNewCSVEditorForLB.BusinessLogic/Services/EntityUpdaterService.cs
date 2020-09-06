@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Comparators;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Interfaces;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Storage;
@@ -9,9 +13,9 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Services
 	public class EntityUpdaterService : IEntityUpdater
 	{
 		// IEntityUpdater ////////////////////////////////////////////////////////////////////////////
-		public VendorsWithProductId[] ChangeFieldVendorIdAndVendorCountry(Product[] products, VendorsWithProductId[] vendors)
+		public VendorsId[] ChangeFieldVendorIdAndVendorCountry(ProductDb[] products, VendorsId[] vendors)
 		{
-			var newVendors = new List<VendorsWithProductId>();
+			var newVendors = new List<VendorsId>();
 
 			foreach(var item in products)
 			{
@@ -22,7 +26,7 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Services
 				}
 				else
 				{
-					newVendors.Add(new VendorsWithProductId { CorrectVendorId = 0, ImportVendorId = item.VendorId });
+					newVendors.Add(new VendorsId { CorrectVendorId = 0, ImportVendorId = item.VendorId });
 				}
 			}
 
@@ -30,7 +34,7 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Services
 
 			return newVendors.ToArray();
 		}
-		public void ChangeFieldVibration(Product[] products)
+		public void ChangeFieldVibration(ProductDb[] products)
 		{
 			foreach(var item in products)
 			{
@@ -40,7 +44,7 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Services
 					item.Vibration = "Нет";
 			}
 		}
-		public void ChangeFieldNewAndBest(Product[] products)
+		public void ChangeFieldNewAndBest(ProductDb[] products)
 		{
 			foreach(var item in products)
 			{
@@ -52,9 +56,46 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Services
 					item.NewAndBestseller = "Хит продаж";
 			}
 		}
-		public Product[] ChangeFieldIeId(Product[] products, ProductIdWithIntarnalId[] ieId)
+
+		/// <summary>
+		/// Set internal category id to field Category in Product.
+		/// </summary>
+		/// <param name="products"></param>
+		/// <param name="categories"></param>
+		/// <returns>
+		///Products containing new categories.
+		/// </returns>
+		public ProductDb[] SetCategoryId(ProductDb[] products, CategoriesWithId[] categories)
 		{
-			var newProducts = new List<Product>();
+			var productsWithNewCategories = new List<ProductDb>();
+			foreach (var product in products)
+			{
+				var searchCategory = new List<Categories>();
+				for (int i = 1; i <= 3; i++)
+				{
+					PropertyInfo info = product.Categories.GetType().GetProperty("Categories" + i);
+					if (info == null) continue;
+					var obj = info.GetValue(product.Categories);
+					if (obj is string)
+					{
+						var name = (string)obj;
+
+						if (i == 1) 
+					}
+				}
+			}
+
+			return productsWithNewCategories.ToArray();
+		}
+		/// <summary>
+		/// Returns a list of new products.
+		/// </summary>
+		/// <param name="products"></param>
+		/// <param name="ieId"></param>
+		/// <returns></returns>
+		public ProductDb[] ChangeFieldIeId(ProductDb[] products, ProductIdWithIntarnalId[] ieId)
+		{
+			var newProducts = new List<ProductDb>();
 
 			foreach(var item in products)
 			{

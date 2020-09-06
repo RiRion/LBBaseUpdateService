@@ -5,9 +5,10 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Services.Interfaces
 {
 	public interface IDataStorageService
 	{
-		Product[] GetProducts(String filePath);
-		VendorsWithProductId[] GetVendors(String filePath);
-		void SaveProducts(Product[] products, String filePath);
-		void SaveVendors(VendorsWithProductId[] vendors, String filePath);
+		ProductDb[] GetProductsFromFile(String filePath);
+		VendorsId[] GetVendorsFromJson(string content);
+		VendorsId[] GetVendorsFromFile(String filePath);
+		void SaveProductsToFile(ProductDb[] products, String filePath);
+		void SaveVendorsToFile(VendorsId[] vendors, String filePath);
 	}
 }

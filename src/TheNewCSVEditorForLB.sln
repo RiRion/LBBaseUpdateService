@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheNewCSVEditorForLB.Ui", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheNewCSVEditorForLB.Headless", "TheNewCSVEditorForLB.Headless\TheNewCSVEditorForLB.Headless.csproj", "{9C7E6AFF-3177-4D3A-B44E-DD8034D2CB3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheNewCSVEditorForLB.Common", "TheNewCSVEditorForLB.Common\TheNewCSVEditorForLB.Common.csproj", "{11173A8E-F0A5-4BF5-B82F-68246385D012}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{9C7E6AFF-3177-4D3A-B44E-DD8034D2CB3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C7E6AFF-3177-4D3A-B44E-DD8034D2CB3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C7E6AFF-3177-4D3A-B44E-DD8034D2CB3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11173A8E-F0A5-4BF5-B82F-68246385D012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11173A8E-F0A5-4BF5-B82F-68246385D012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11173A8E-F0A5-4BF5-B82F-68246385D012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11173A8E-F0A5-4BF5-B82F-68246385D012}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

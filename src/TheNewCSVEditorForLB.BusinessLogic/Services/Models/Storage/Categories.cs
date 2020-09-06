@@ -5,6 +5,8 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Services.Models.Storage
 {
 	public class Categories
 	{
+		[Ignore]
+		public Int32 CategoryId { get; set; }
 		[Name("categories_1")]
 		public String Categories1 { get; set; }
 		[Name("categories_2")]

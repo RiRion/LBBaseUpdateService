@@ -4,9 +4,9 @@ using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Storage;
 
 namespace TheNewCSVEditorForLB.BusinessLogic.Services.Comparators
 {
-	public class VendorDictionaryComp : IComparer<VendorsWithProductId>
+	public class VendorDictionaryComp : IComparer<VendorsId>
 	{
-		public Int32 Compare(VendorsWithProductId x, VendorsWithProductId y)
+		public Int32 Compare(VendorsId x, VendorsId y)
 		{
 			if(x.ImportVendorId.CompareTo(y.ImportVendorId) != 0)
 				return x.ImportVendorId.CompareTo(y.ImportVendorId);

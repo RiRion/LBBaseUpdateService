@@ -3,7 +3,7 @@ using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Storage;
 
 namespace TheNewCSVEditorForLB.BusinessLogic.Services.Mappings
 {
-	public class VendorDictionaryMap : ClassMap<VendorsWithProductId>
+	public class VendorDictionaryMap : ClassMap<VendorsId>
 	{
 		public VendorDictionaryMap()
 		{

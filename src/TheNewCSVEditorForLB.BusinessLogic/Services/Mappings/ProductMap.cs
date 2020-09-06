@@ -3,7 +3,7 @@ using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Storage;
 
 namespace TheNewCSVEditorForLB.BusinessLogic.Services.Mappings
 {
-	public sealed class ProductMap : ClassMap<Product>
+	public sealed class ProductMap : ClassMap<ProductDb>
 	{
 		public ProductMap()
 		{

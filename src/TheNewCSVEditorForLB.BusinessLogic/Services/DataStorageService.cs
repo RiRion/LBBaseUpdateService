@@ -3,6 +3,7 @@ using CsvHelper.Configuration;
 using System;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Interfaces;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Mappings;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Storage;
@@ -12,9 +13,13 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Services
 	public class DataStorageService : IDataStorageService
 	{
 		// IDataStorageService ////////////////////////////////////////////////////////////////////
-
+		//Properties.
+		public ProductDb[] Products { get; set; }
+		public ProductDb[] NewProducts { get; set; }
+		public ProductDb[] RemoveProducts { get; set; }
+		
 		// Get
-		public Product[] GetProducts(String filePath)
+		public ProductDb[] GetProductsFromFile(String filePath)
 		{
 			using(var stream = new StreamReader(filePath))
 			using(var csv = new CsvReader(stream))
@@ -25,10 +30,16 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Services
 				csv.Configuration.BadDataFound = null;
 				csv.Configuration.RegisterClassMap<ProductMap>();
 
-				return csv.GetRecords<Product>().ToArray();
+				return csv.GetRecords<ProductDb>().ToArray();
 			}
 		}
-		public VendorsWithProductId[] GetVendors(String filePath)
+
+		public VendorsId[] GetVendorsFromJson(string content)
+		{
+			return JsonConvert.DeserializeObject<VendorsId[]>(content);
+		}
+		
+		public VendorsId[] GetVendorsFromFile(String filePath)
 		{
 			using(var stream = new StreamReader(filePath))
 			using(var csv = new CsvReader(stream))
@@ -39,12 +50,12 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Services
 				csv.Configuration.BadDataFound = null;
 				csv.Configuration.RegisterClassMap<VendorDictionaryMap>();
 
-				return csv.GetRecords<VendorsWithProductId>().ToArray();
+				return csv.GetRecords<VendorsId>().ToArray();
 			}
 		}
 
 		// Save
-		public void SaveProducts(Product[] products, String filePath)
+		public void SaveProductsToFile(ProductDb[] products, String filePath)
 		{
 			using(var stream = new StreamWriter(filePath))
 			using(var csv = new CsvWriter(stream))
@@ -54,7 +65,7 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Services
 				csv.WriteRecords(products);
 			}
 		}
-		public void SaveVendors(VendorsWithProductId[] vendors, String filePath)
+		public void SaveVendorsToFile(VendorsId[] vendors, String filePath)
 		{
 			using(var stream = new StreamWriter(filePath))
 			using(var csv = new CsvWriter(stream))

@@ -1,13 +1,11 @@
 ﻿using Autofac;
-using Microsoft.Extensions.DependencyModel;
 using System;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using TheNewCSVEditorForLB.BusinessLogic.ExternalClients.LoveBeri.Models.Config;
+using BitrixService.Services;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Config;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Exceptions;
+using TheNewCSVEditorForLB.Common.DependencyInjection;
 
 namespace TheNewCSVEditorForLB.Headless
 {
@@ -31,19 +29,18 @@ namespace TheNewCSVEditorForLB.Headless
 		private static IContainer CreateContainer()
 		{
 			var builder = new ContainerBuilder();
-
-			builder.RegisterType<ApplicationContext>()
-				.WithParameters(new[]
-				{
-					new NamedParameter("test", "test")
-				});
+			
+			builder.RegisterModule(new AutoMapperModule(Collector.GetAssemblies("BusinessLogic")));
+			builder.RegisterAssemblyModules(Collector.GetAssemblies("BusinessLogic"));
+			builder.RegisterType<ApplicationContext>();
 			builder.RegisterInstance(CreateConfig());
-			builder.RegisterInstance(new LoveBeriClientConfig()
-			{
-				BaseUrl = "https://loveberi.ru"
-			});
-			builder.RegisterAssemblyModules(LoadAssemblies("BusinessLogic"));
-
+			builder.RegisterInstance(new ApiService(
+				"http://loveberi.localhost",
+				"/my_tools",
+				"admin",
+				"Lb0717511930"
+			));
+			
 			return builder.Build();
 		}
 		private static ApplicationConfig CreateConfig()
@@ -96,13 +93,6 @@ namespace TheNewCSVEditorForLB.Headless
 				BitrixFilePath = bitrixFilePath,
 				VendorsFilePath = vendorDictionaryFilePath
 			};
-		}
-		public static Assembly[] LoadAssemblies(String partOfName)
-		{
-			return DependencyContext.Default.CompileLibraries
-				.Where(d => d.Name.Contains(partOfName))
-				.Select(p => Assembly.Load(new AssemblyName(p.Name)))
-				.ToArray();
 		}
 	}
 }

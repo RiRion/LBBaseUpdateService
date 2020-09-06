@@ -4,9 +4,10 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Services.Interfaces
 {
 	public interface IEntityUpdater
 	{
-		VendorsWithProductId[] ChangeFieldVendorIdAndVendorCountry(Product[] products, VendorsWithProductId[] vendors);
-		void ChangeFieldVibration(Product[] products);
-		void ChangeFieldNewAndBest(Product[] products);
-		Product[] ChangeFieldIeId(Product[] products, ProductIdWithIntarnalId[] ieId);
+		VendorsId[] ChangeFieldVendorIdAndVendorCountry(ProductDb[] products, VendorsId[] vendors);
+		void ChangeFieldVibration(ProductDb[] products);
+		void ChangeFieldNewAndBest(ProductDb[] products);
+		ProductDb[] ChangeFieldIeId(ProductDb[] products, ProductIdWithIntarnalId[] ieId);
+		ProductDb[] SetCategoryId(ProductDb[] products, CategoriesWithId[] categories);
 	}
 }
