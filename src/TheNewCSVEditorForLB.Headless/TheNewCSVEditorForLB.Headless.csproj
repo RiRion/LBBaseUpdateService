@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="TestData\Bitrix.csv" />
+      <None Remove="TestData\VendorsDictionary.csv" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="TestData\Bitrix.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="TestData\VendorsDictionary.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TheNewCSVEditorForLB.BusinessLogic\TheNewCSVEditorForLB.BusinessLogic.csproj" />
+      <ProjectReference Include="..\TheNewCSVEditorForLB.Common\TheNewCSVEditorForLB.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="BitrixService.ApiClients, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\..\..\BitrixService\BitrixService.ApiClients\bin\Debug\netcoreapp3.1\BitrixService.ApiClients.dll</HintPath>
+      </Reference>
+      <Reference Include="BitrixService.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\..\..\BitrixService\BitrixService.ApiClients\bin\Debug\netcoreapp3.1\BitrixService.Contracts.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+</Project>
