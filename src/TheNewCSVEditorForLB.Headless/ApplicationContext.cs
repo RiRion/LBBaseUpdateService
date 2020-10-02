@@ -126,25 +126,25 @@ namespace TheNewCSVEditorForLB.Headless
 		}
 		
 		private async Task SendToSite<T>(T[] list, Func<T[], Task> action)
-        		{
-        			var s = action.Method.Name;
-        			var i = 0;
-        			var step = 100;
-        			do
-        			{
-        				var watch = new Stopwatch();
-        				watch.Start();
-        				if (list.Length - i < step)
-        				{
-        					step = list.Length - i;
-        					i = list.Length;
-        				}
-        				else i += 100;
-        				await action(list.Skip(i - step).Take(step).ToArray());
-        				watch.Stop();
-        				Console.WriteLine($"{s}: Completed {i}. Count {list.Length}. Iteration time: {watch.ElapsedMilliseconds/1000} s.");
-        			} while (i < list.Length);
-        		}
+		{
+			var s = action.Method.Name;
+			var i = 0;
+			var step = 100;
+			do
+			{
+				var watch = new Stopwatch();
+				watch.Start();
+				if (list.Length - i < step)
+				{
+					step = list.Length - i;
+					i = list.Length;
+				}
+				else i += 100;
+				await action(list.Skip(i - step).Take(step).ToArray());
+				watch.Stop();
+				Console.WriteLine($"{s}: Completed {i}. Count {list.Length}. Iteration time: {watch.ElapsedMilliseconds/1000} s.");
+			} while (i < list.Length);
+		}
 
 		// IDisposable ////////////////////////////////////////////////////////////////////////////
 		public void Dispose()
