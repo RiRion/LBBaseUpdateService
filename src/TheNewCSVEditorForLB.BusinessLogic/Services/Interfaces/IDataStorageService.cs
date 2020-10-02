@@ -1,14 +1,15 @@
 using System;
-using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Storage;
+using TheNewCSVEditorForLB.BusinessLogic.Services.Models;
+using TheNewCSVEditorForLB.BusinessLogic.Services.ProductService.Models;
 
 namespace TheNewCSVEditorForLB.BusinessLogic.Services.Interfaces
 {
 	public interface IDataStorageService
 	{
-		ProductDb[] GetProductsFromFile(String filePath);
-		VendorsId[] GetVendorsFromJson(string content);
-		VendorsId[] GetVendorsFromFile(String filePath);
-		void SaveProductsToFile(ProductDb[] products, String filePath);
-		void SaveVendorsToFile(VendorsId[] vendors, String filePath);
+		Product[] GetProductsFromFile(String filePath);
+		VendorId[] GetVendorsFromJson(string content);
+		VendorId[] GetVendorsFromFile(String filePath);
+		void SaveProductsToFile(Product[] products, String filePath);
+		void SaveVendorsToFile(VendorId[] vendors, String filePath);
 	}
 }

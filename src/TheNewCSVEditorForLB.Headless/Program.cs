@@ -2,10 +2,11 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using BitrixService.Services;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Config;
 using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Exceptions;
 using TheNewCSVEditorForLB.Common.DependencyInjection;
+using BitrixService.ApiClients.Models.Config;
+using BitrixService.ApiClients.Stripmag.Models.Config;
 
 namespace TheNewCSVEditorForLB.Headless
 {
@@ -32,13 +33,19 @@ namespace TheNewCSVEditorForLB.Headless
 			
 			builder.RegisterModule(new AutoMapperModule(Collector.GetAssemblies("BusinessLogic")));
 			builder.RegisterAssemblyModules(Collector.GetAssemblies("BusinessLogic"));
+			builder.RegisterAssemblyModules(Collector.GetAssemblies("ApiClients"));
 			builder.RegisterType<ApplicationContext>();
 			builder.RegisterInstance(CreateConfig());
-			builder.RegisterInstance(new ApiService(
+			builder.RegisterInstance(new LoveberiClientConfig(
 				"http://loveberi.localhost",
 				"/my_tools",
 				"admin",
 				"Lb0717511930"
+			));
+			builder.RegisterInstance(new StripmagClientConfig(
+				"http://feed.p5s.ru/data",
+				"/5d95eca8bec371.02477530",
+				"/5d95eca8bec371.02477530?stock"
 			));
 			
 			return builder.Build();
@@ -54,7 +61,9 @@ namespace TheNewCSVEditorForLB.Headless
 
 			applicationConfig.NewProductsFilePath = Path.Combine(bitrixParentDirectory, "new_productId.csv");
 			applicationConfig.NewBaseFilePath = Path.Combine(bitrixParentDirectory, "new_base.csv");
-			applicationConfig.NewVendorsFilePath = Path.Combine(Directory.GetParent(applicationConfig.VendorsFilePath).FullName, "new_vendors.csv");
+			applicationConfig.NewVendorsFilePath = Path
+				.Combine(Directory.GetParent(applicationConfig.VendorsFilePath)
+					.FullName, "new_vendors_" + DateTime.Now.ToString("HH-mm_dd-MM-yy") + ".csv");
 
 			return applicationConfig;
 		}

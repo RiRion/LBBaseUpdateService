@@ -1,5 +1,6 @@
 using AutoMapper;
-using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Storage;
+using BitrixService.Contracts.ApiModels;
+using TheNewCSVEditorForLB.BusinessLogic.Services.ProductService.Models;
 
 namespace TheNewCSVEditorForLB.BusinessLogic.Middleware.AutoMapperProfiles
 {
@@ -7,11 +8,15 @@ namespace TheNewCSVEditorForLB.BusinessLogic.Middleware.AutoMapperProfiles
     {
         public ProductProfile()
         {
-            CreateMap<ProductDb, ProductDto>()
-                .ForMember(m => m.Category, 
+            CreateMap<Product, ProductAto>()
+                .ForMember(m => m.Category,
                     opt => opt.MapFrom(
-                        p=>p.Categories.CategoryId
-                        ));
+                        p => p.Categories.CategoryId
+                    ))
+                .ReverseMap()
+                .ForPath(m => m.Categories.CategoryId, opt => opt.MapFrom(
+                    p => p.Category));
+            CreateMap<Product, ProductFromSupplierAto>().ReverseMap();
         }
     }
 }

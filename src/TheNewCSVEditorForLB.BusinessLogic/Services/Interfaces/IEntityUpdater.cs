@@ -1,13 +1,14 @@
-using TheNewCSVEditorForLB.BusinessLogic.Services.Models.Storage;
+using TheNewCSVEditorForLB.BusinessLogic.Services.Models;
+using TheNewCSVEditorForLB.BusinessLogic.Services.ProductService.Models;
 
 namespace TheNewCSVEditorForLB.BusinessLogic.Services.Interfaces
 {
 	public interface IEntityUpdater
 	{
-		VendorsId[] ChangeFieldVendorIdAndVendorCountry(ProductDb[] products, VendorsId[] vendors);
-		void ChangeFieldVibration(ProductDb[] products);
-		void ChangeFieldNewAndBest(ProductDb[] products);
-		ProductDb[] ChangeFieldIeId(ProductDb[] products, ProductIdWithIntarnalId[] ieId);
-		ProductDb[] SetCategoryId(ProductDb[] products, CategoriesWithId[] categories);
+		VendorId[] ChangeFieldVendorIdAndVendorCountry(Product[] products, VendorId[] vendors);
+		void ChangeFieldVibration(Product[] products);
+		void ChangeFieldNewAndBest(Product[] products);
+		Product[] ChangeFieldIeId(Product[] products, ProductIdWithInternalId[] ieId);
+		Product[] SetCategoryId(Product[] products, Category[] categories);
 	}
 }
