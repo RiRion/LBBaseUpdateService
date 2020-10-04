@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="TestData\Bitrix.csv" />
+      <None Remove="TestData\VendorsDictionary.csv" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="TestData\Bitrix.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="TestData\VendorsDictionary.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\LBBaseUpdateService.BusinessLogic\LBBaseUpdateService.BusinessLogic.csproj" />
+      <ProjectReference Include="..\LBBaseUpdateService.Common\LBBaseUpdateService.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="BitrixService" Version="1.0.5" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    </ItemGroup>
+</Project>
