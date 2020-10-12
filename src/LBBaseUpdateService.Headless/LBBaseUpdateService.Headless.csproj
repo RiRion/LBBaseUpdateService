@@ -8,6 +8,9 @@
     <ItemGroup>
       <None Remove="TestData\Bitrix.csv" />
       <None Remove="TestData\VendorsDictionary.csv" />
+      <None Update="appConfig.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -25,7 +28,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="BitrixService" Version="1.0.5" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.8" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.8" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="BitrixService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\..\..\BitrixService\src\BitrixService\bin\Release\netstandard2.1\BitrixService.dll</HintPath>
+      </Reference>
     </ItemGroup>
 </Project>

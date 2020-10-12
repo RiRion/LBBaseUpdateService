@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Autofac;
 using BitrixService.Clients.Loveberi.Models.Config;
 using BitrixService.Clients.Stripmag.Models.Config;
 using LBBaseUpdateService.Common.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 namespace LBBaseUpdateService.Headless
 {
@@ -16,7 +18,8 @@ namespace LBBaseUpdateService.Headless
 		}
 		private static async Task MainAsync(String[] args)
 		{
-			using(var container = CreateContainer())
+			var configuration = GetConfiguration();
+			using(var container = CreateContainer(configuration))
 			{
 				var context = container.Resolve<ApplicationContext>();
 				await context.RunAsync();
@@ -24,7 +27,7 @@ namespace LBBaseUpdateService.Headless
 		}
 		
 		// SUPPORT FUNCTIONS ////////////////////////////////////////////////////////////////////////////
-		private static IContainer CreateContainer()
+		private static IContainer CreateContainer(IConfiguration configuration)
 		{
 			var builder = new ContainerBuilder();
 			
@@ -32,19 +35,16 @@ namespace LBBaseUpdateService.Headless
 			builder.RegisterAssemblyModules(Collector.GetAssemblies("BusinessLogic"));
 			builder.RegisterAssemblyModules(Collector.GetAssemblies("BitrixService"));
 			builder.RegisterType<ApplicationContext>();
-			builder.RegisterInstance(new LoveberiClientConfig(
-				"https://loveberi.ru",
-				"/my_tools",
-				"admin",
-				"Lb0717511930"
-			));
-			builder.RegisterInstance(new StripmagClientConfig(
-				"http://feed.p5s.ru/data",
-				"/5d95eca8bec371.02477530",
-				"/5d95eca8bec371.02477530?stock"
-			));
+			builder.RegisterClientConfigurations(configuration, Collector.GetAssembly("BitrixService"));
 			
 			return builder.Build();
+		}
+
+		private static IConfiguration GetConfiguration()
+		{
+			return new ConfigurationBuilder()
+				.AddJsonFile("appConfig.json")
+				.Build();
 		}
 	}
 }
