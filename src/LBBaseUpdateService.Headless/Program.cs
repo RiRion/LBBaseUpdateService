@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Autofac;
-using BitrixService.Clients.Loveberi.Models.Config;
-using BitrixService.Clients.Stripmag.Models.Config;
 using LBBaseUpdateService.Common.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 

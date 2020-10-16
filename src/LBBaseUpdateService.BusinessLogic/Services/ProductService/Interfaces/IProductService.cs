@@ -9,10 +9,9 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService.Interfaces
         void ChangeFieldVibration(Product[] products);
         void ChangeFieldNewAndBest(Product[] products);
 
-        Product[] SetCategoryId(Product[] products, Category[] categories) // TODO: Think about it. How does better this method?
-            ;
+        void SetMainCategoryId(Product[] products, Category[] categories); // TODO: Think about it. How does better this method?
 
         void ChangeFieldIeId(Product[] products, ProductIdWithInternalId[] ieId);
-        Product[] GetProductSheetToUpdate(Product[] vendorProducts, Product[] internalProducts);
+        Product[] GetProductSheetToUpdate(Product[] externalProducts, Product[] internalProducts);
     }
 }

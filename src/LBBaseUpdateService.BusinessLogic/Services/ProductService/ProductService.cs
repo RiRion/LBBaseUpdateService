@@ -49,62 +49,25 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
             }
         }
         
-        public Product[] SetCategoryId(Product[] products, Category[] categories) // TODO: Think about it. How does better this method?
+        public void SetMainCategoryId(Product[] products, Category[] categories)
         		{
-        			var productsWithNewCategories = new List<Product>();
         			foreach (var product in products)
                     {
-	                    product.Categories.Category1.Name = product.Categories.Category1.Name.Trim();
-        				var internalCategory1 = categories.FirstOrDefault(
-        						c => c.Name == product.Categories.Category1.Name && c.ParentId == 0);
-        				if (internalCategory1 != null) product.Categories.Category1 = internalCategory1;
-        				else
-        				{
-        					productsWithNewCategories.Add(product);
-        					continue;
-        				}
-        				
-        				if (String.IsNullOrEmpty(product.Categories.Category2.Name))
-        				{
-        					product.Categories.CategoryId = product.Categories.Category1.Id;
-        					continue;
-        				}
+	                    for (int i = 0; i < product.Categories.Count(); i++)
+	                    {
+		                    if (!String.IsNullOrEmpty(product.Categories.ElementAt(i).Name))
+		                    {
+			                    if (i != 0)
+				                    product.Categories.ElementAt(i).ParentId = product.Categories.ElementAt(i - 1).Id;
+			                    SetCategoryId(product.Categories.ElementAt(i), categories);
+		                    }
+		                    else break;
+	                    }
 
-                        product.Categories.Category2.Name = product.Categories.Category2.Name.Trim();
-        				var internalCategory2 = categories.FirstOrDefault(
-        						c => c.Name == product.Categories.Category2.Name 
-                                     && c.ParentId == product.Categories.Category1.Id
-        						);
-        				if (internalCategory2 != null) product.Categories.Category2 = internalCategory2;
-        				else
-        				{
-        					productsWithNewCategories.Add(product);
-        					continue;
-        				}
-        				
-        				if (String.IsNullOrEmpty(product.Categories.Category3.Name))
-        				{
-        					product.Categories.CategoryId = product.Categories.Category2.Id;
-        					continue;
-        				}
-
-                        product.Categories.Category3.Name = product.Categories.Category3.Name.Trim();
-        				var internalCategory3 = categories.FirstOrDefault(
-        						c => c.Name == product.Categories.Category3.Name 
-                                     && c.ParentId == product.Categories.Category2.Id
-        					);
-        				if (internalCategory3 != null)
-        				{
-        					product.Categories.Category3 = internalCategory3;
-        					product.Categories.CategoryId = product.Categories.Category3.Id;
-        				}
-        				else
-        				{
-        					productsWithNewCategories.Add(product);
-        				}
-        			}
-        
-        			return productsWithNewCategories.ToArray();
+	                    product.CategoryId = product.Categories
+		                    .Last(c => !String.IsNullOrEmpty(c.Name))
+		                    .Id;
+                    }
         		}
         
         public void ChangeFieldIeId(Product[] products, ProductIdWithInternalId[] ieId)
@@ -116,12 +79,12 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
 	        }
         }
 
-        public Product[] GetProductSheetToUpdate(Product[] vendorProducts, Product[] internalProducts)
+        public Product[] GetProductSheetToUpdate(Product[] externalProducts, Product[] internalProducts)
         {
 	        var updateSheet = new List<Product>();
 	        foreach (var product in internalProducts)
 	        {
-		        var vendorProduct = vendorProducts.FirstOrDefault(p => p.ProductId == product.ProductId);
+		        var vendorProduct = externalProducts.FirstOrDefault(p => p.ProductId == product.ProductId);
 		        if (vendorProduct != null && !vendorProduct.Equals(product))
 		        {
 			        updateSheet.Add(vendorProduct);
@@ -129,6 +92,21 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
 	        }
 
 	        return updateSheet.ToArray();
+        }
+
+        public void SetCategoryId(Category category, Category[] categoriesFromSite)
+        {
+	        category.Name = category.Name.Trim();
+	        var categoryFromSite = categoriesFromSite.FirstOrDefault(
+		        c => c.Name.Equals(category.Name) 
+		             && (c.ParentId == category.ParentId || c.ParentId == 0)
+	        );
+	        if (categoryFromSite != null)
+	        {
+		        category.ParentId = categoryFromSite.ParentId;
+		        category.Id = categoryFromSite.Id;
+	        }
+	        else throw new CategoryNotFoundException($"Category with provided name \"{category.Name}\" not found.");
         }
     }
 }

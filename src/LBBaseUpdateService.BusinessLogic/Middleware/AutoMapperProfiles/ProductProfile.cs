@@ -9,13 +9,9 @@ namespace LBBaseUpdateService.BusinessLogic.Middleware.AutoMapperProfiles
         public ProductProfile()
         {
             CreateMap<Product, ProductAto>()
-                .ForMember(m => m.Category,
-                    opt => opt.MapFrom(
-                        p => p.Categories.CategoryId
-                    ))
                 .ReverseMap()
-                .ForPath(m => m.Categories.CategoryId, opt => opt.MapFrom(
-                    p => p.Category));
+                .ForPath(m => m.Categories, 
+                    opt => opt.Ignore());
             CreateMap<Product, ProductFromSupplierAto>().ReverseMap();
         }
     }

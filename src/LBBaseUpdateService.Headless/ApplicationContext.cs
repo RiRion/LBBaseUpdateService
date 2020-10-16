@@ -50,6 +50,8 @@ namespace LBBaseUpdateService.Headless
 		{
 			_loveberiClient.Login();
 			
+			// TODO: Require update vendorId.
+			// TODO: Require update categories.
 			await UpdateProducts();
 			await UpdateOffers();
 		}
@@ -65,15 +67,11 @@ namespace LBBaseUpdateService.Headless
 			_productService.ChangeFieldVibration(productsFromSupplier);
 			_productService.ChangeFieldNewAndBest(productsFromSupplier);
 			_productService.ChangeFieldIeId(productsFromSupplier, prodIdWithIeId);
-			_productService.SetCategoryId(productsFromSupplier, categoriesFromSite);
+			_productService.SetMainCategoryId(productsFromSupplier, categoriesFromSite);
 			_productService.ChangeFieldVendorIdAndVendorCountry(productsFromSupplier, vendorsFromSite);
 
 			// TODO: delete repeating products id. Need to add several categories.
 			var withoutRepeatingProdId = productsFromSupplier.Distinct(new ProductIdComparer()).ToArray();
-			// TODO: Require update vendorId.
-			var newVendorsId = productsFromSupplier.Where(p => p.VendorId == 0).ToArray();
-			// TODO: Require update categories.
-			var productWithNewCategory = productsFromSupplier.Where(p => p.Categories.CategoryId == 0).ToArray();
 
 			var addSheet = withoutRepeatingProdId.Except(productsFromSite, new ProductIdComparer()).ToArray();
 			var updateSheet = _productService.GetProductSheetToUpdate(withoutRepeatingProdId, productsFromSite);
@@ -119,19 +117,20 @@ namespace LBBaseUpdateService.Headless
 			var methodName = action.Method.Name;
 			var i = 0;
 			var step = 100;
+			var watch = new Stopwatch();
 			do
 			{
-				var watch = new Stopwatch();
 				watch.Start();
 				if (list.Length - i < step)
 				{
 					step = list.Length - i;
 					i = list.Length;
 				}
-				else i += 100;
+				else i += step;
 				await action(list.Skip(i - step).Take(step).ToArray());
 				watch.Stop();
 				Console.WriteLine($"{methodName}: Completed {i}. Count {list.Length}. Iteration time: {watch.ElapsedMilliseconds/1000} s.");
+				watch.Reset();
 			} while (i < list.Length);
 		}
 

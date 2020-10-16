@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace LBBaseUpdateService.BusinessLogic.Services.ProductService.Models
 {
@@ -16,7 +17,8 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService.Models
 		public string Length { get; set; }
 		public string Diameter { get; set; }
 		public string Collection { get; set; }
-		public Categories Categories { get; set; }
+		public int CategoryId { get; set; }
+		public IEnumerable<Category> Categories { get; set; }
 		public string Bestseller { get; set; }
 		public string New { get; set; }
 		public string Function { get; set; }
@@ -44,6 +46,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService.Models
 			       && Material == other.Material 
 			       && Length == other.Length 
 			       && Diameter == other.Diameter
+			       && CategoryId == other.CategoryId
 			       && Function == other.Function 
 			       && AddFunction == other.AddFunction 
 			       && Vibration == other.Vibration 
@@ -74,6 +77,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService.Models
 			hashCode.Add(Material);
 			hashCode.Add(Length);
 			hashCode.Add(Diameter);
+			hashCode.Add(CategoryId);
 			hashCode.Add(Function);
 			hashCode.Add(AddFunction);
 			hashCode.Add(Vibration);
