@@ -7,15 +7,13 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.2.0" />
     <PackageReference Include="AutoMapper" Version="10.0.0" />
-    <PackageReference Include="CsvHelper" Version="15.0.6" />
+    <PackageReference Include="CsvHelper" Version="15.0.8" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="BitrixService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\BitrixService\src\BitrixService\bin\Release\netstandard2.1\BitrixService.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\..\..\BitrixService\src\BitrixService\BitrixService.csproj" />
   </ItemGroup>
 
 </Project>

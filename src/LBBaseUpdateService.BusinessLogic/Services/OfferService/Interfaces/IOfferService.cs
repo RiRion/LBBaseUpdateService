@@ -10,6 +10,6 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService.Interfaces
         Offer[] GetOfferSheetToAdd(Offer[] vendorOffers, Offer[] internalOffers);
         Offer[] GetOffersSheetToUpdate(Offer[] vendorOffers, Offer[] internalOffers);
         int[] GetOffersIdToDelete(Offer[] vendorOffers, Offer[] internalOffers);
-        void SetDefaultFieldWeight(IEnumerable<Offer> offers);
+        void DeleteOffersWithoutProduct(List<Offer> offers, ProductIdWithInternalId[] idSheet);
     }
 }

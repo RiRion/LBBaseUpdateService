@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using LBBaseUpdateService.BusinessLogic.Services.OfferService.Comparators;
+using LBBaseUpdateService.BusinessLogic.Services.OfferService.Exceptions;
 using LBBaseUpdateService.BusinessLogic.Services.OfferService.Interfaces;
 using LBBaseUpdateService.BusinessLogic.Services.OfferService.Models;
 using LBBaseUpdateService.BusinessLogic.Services.ProductService.Models;
@@ -12,14 +13,19 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService
     {
         public void ReplaceVendorProductIdWithInternalId(List<Offer> offers, ProductIdWithInternalId[] idSheet)
         {
-            List<Offer> copyList = new List<Offer>(offers); // TODO: There are offers for products that do not exist in the database.
-            foreach (var offer in copyList)
+            foreach (var offer in offers)
             {
                 var pair = idSheet.FirstOrDefault(
                     p => p.ProductId == offer.ProductId);
-                if (pair != null) offer.ProductId = pair.IeId;
-                else offers.Remove(offer);
+                if (pair is null) 
+                    throw new ProductIdNotFoundException($"Product with provided ID {offer.ProductId} not found.");
+                offer.ProductId = pair.IeId;
             }
+        }
+
+        public void DeleteOffersWithoutProduct(List<Offer> offers, ProductIdWithInternalId[] idSheet)
+        {
+            offers.RemoveAll(o => !idSheet.Any(i => i.ProductId.Equals(o.ProductId)));
         }
         
         public Offer[] GetOfferSheetToAdd(Offer[] vendorOffers, Offer[] internalOffers)
@@ -41,14 +47,6 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService
             }
 
             return updateSheet.ToArray();
-        }
-
-        public void SetDefaultFieldWeight(IEnumerable<Offer> offers)
-        {
-            foreach (var offer in offers)
-            {
-                if (String.IsNullOrEmpty(offer.Weight)) offer.Weight = "0";
-            }
         }
 
         public int[] GetOffersIdToDelete(Offer[] vendorOffers, Offer[] internalOffers)

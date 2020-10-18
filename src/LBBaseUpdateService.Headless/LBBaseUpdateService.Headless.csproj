@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\..\BitrixService\src\BitrixService\BitrixService.csproj" />
       <ProjectReference Include="..\LBBaseUpdateService.BusinessLogic\LBBaseUpdateService.BusinessLogic.csproj" />
       <ProjectReference Include="..\LBBaseUpdateService.Common\LBBaseUpdateService.Common.csproj" />
     </ItemGroup>
@@ -31,11 +32,5 @@
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.8" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.8" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="BitrixService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\..\..\..\BitrixService\src\BitrixService\bin\Release\netstandard2.1\BitrixService.dll</HintPath>
-      </Reference>
     </ItemGroup>
 </Project>

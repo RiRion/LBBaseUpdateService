@@ -94,8 +94,8 @@ namespace LBBaseUpdateService.Headless
 			var prodIdWithIeId = 
 				_mapper.Map<ProductIdWithInternalId[]>(await _loveberiClient.GetProductIdWithIeIdAsync());
 			
+			_offerService.DeleteOffersWithoutProduct(offersFromSupplier, prodIdWithIeId);
 			_offerService.ReplaceVendorProductIdWithInternalId(offersFromSupplier, prodIdWithIeId);
-			_offerService.SetDefaultFieldWeight(offersFromSupplier);
 			
 			var addSheet = _offerService.GetOfferSheetToAdd(offersFromSupplier.ToArray(), offersFromSite);
 			var updateSheet = _offerService.GetOffersSheetToUpdate(offersFromSupplier.ToArray(), offersFromSite);

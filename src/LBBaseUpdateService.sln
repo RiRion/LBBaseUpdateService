@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BB536DED
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LBBaseUpdateService.BusinessLogic.Tests", "LBBaseUpdateService.BusinessLogic.Tests\LBBaseUpdateService.BusinessLogic.Tests.csproj", "{411922B9-6422-4741-AE47-3917C291023E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitrixService", "..\..\..\BitrixService\src\BitrixService\BitrixService.csproj", "{0738FA36-0D4C-45CC-AEEE-D9B336B474FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{411922B9-6422-4741-AE47-3917C291023E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{411922B9-6422-4741-AE47-3917C291023E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{411922B9-6422-4741-AE47-3917C291023E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0738FA36-0D4C-45CC-AEEE-D9B336B474FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0738FA36-0D4C-45CC-AEEE-D9B336B474FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0738FA36-0D4C-45CC-AEEE-D9B336B474FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0738FA36-0D4C-45CC-AEEE-D9B336B474FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,5 +63,6 @@ Global
 		{11173A8E-F0A5-4BF5-B82F-68246385D012} = {A2F1870F-482B-43D7-8D57-3222D8C22B7D}
 		{9C7E6AFF-3177-4D3A-B44E-DD8034D2CB3C} = {A2F1870F-482B-43D7-8D57-3222D8C22B7D}
 		{411922B9-6422-4741-AE47-3917C291023E} = {BB536DED-C2D2-478C-AB40-C1DEAA8C5BC4}
+		{0738FA36-0D4C-45CC-AEEE-D9B336B474FC} = {A2F1870F-482B-43D7-8D57-3222D8C22B7D}
 	EndGlobalSection
 EndGlobal
