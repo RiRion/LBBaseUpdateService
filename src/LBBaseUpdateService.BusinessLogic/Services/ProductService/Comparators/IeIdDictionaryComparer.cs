@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using LBBaseUpdateService.BusinessLogic.Services.ProductService.Models;
 
-namespace LBBaseUpdateService.BusinessLogic.Services.Comparators
+namespace LBBaseUpdateService.BusinessLogic.Services.ProductService.Comparators
 {
-	public class IeIdDictionaryComp : IComparer<ProductIdWithInternalId>
+	public class IeIdDictionaryComparer : IComparer<ProductIdWithInternalId>
 	{
 		public Int32 Compare(ProductIdWithInternalId x, ProductIdWithInternalId y)
 		{

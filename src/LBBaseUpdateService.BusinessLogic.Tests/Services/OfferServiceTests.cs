@@ -109,7 +109,7 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
         }
 
         [TestMethod]
-        public void GetOffersIdToDelete()
+        public void GetOffersIdToDeleteTests()
         {
             // Arrange
             var offerService = new OfferService();

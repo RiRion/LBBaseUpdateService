@@ -14,6 +14,8 @@ using LBBaseUpdateService.BusinessLogic.Services.OfferService.Models;
 using LBBaseUpdateService.BusinessLogic.Services.ProductService.Comparators;
 using LBBaseUpdateService.BusinessLogic.Services.ProductService.Interfaces;
 using LBBaseUpdateService.BusinessLogic.Services.ProductService.Models;
+using LBBaseUpdateService.BusinessLogic.Services.VendorService.Interfaces;
+using LBBaseUpdateService.BusinessLogic.Services.VendorService.Models;
 
 namespace LBBaseUpdateService.Headless
 {
@@ -22,6 +24,7 @@ namespace LBBaseUpdateService.Headless
 		private readonly ILifetimeScope _lifetimeScope;
 		private readonly ILoveberiClient _loveberiClient;
 		private readonly IStripmagClient _stripmagClient;
+		private readonly IVendorService _vendorService;
 		private readonly IOfferService _offerService;
 		private readonly IProductService _productService;
 		private readonly IMapper _mapper;
@@ -31,6 +34,7 @@ namespace LBBaseUpdateService.Headless
 			ILifetimeScope lifetimeScope,
 			ILoveberiClient loveberiClient,
 			IStripmagClient stripmagClient,
+			IVendorService vendorService,
 			IOfferService offerService,
 			IProductService productService,
 			IMapper mapper
@@ -39,6 +43,7 @@ namespace LBBaseUpdateService.Headless
 			_lifetimeScope = lifetimeScope;
 			_loveberiClient = loveberiClient;
 			_stripmagClient = stripmagClient;
+			_vendorService = vendorService;
 			_offerService = offerService;
 			_mapper = mapper;
 			_productService = productService;
@@ -48,12 +53,28 @@ namespace LBBaseUpdateService.Headless
 		// FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////
 		public async Task RunAsync()
 		{
-			_loveberiClient.Login();
-			
-			// TODO: Require update vendorId.
-			// TODO: Require update categories.
-			await UpdateProducts();
-			await UpdateOffers();
+			try
+			{
+				_loveberiClient.Login();
+				await UpdateVendors();
+				// TODO: Require update categories.
+				await UpdateProducts();
+				await UpdateOffers();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine($"Error: {e.Message}");
+			}
+		}
+
+		private async Task UpdateVendors()
+		{
+			var vendorsFromSupplier = _mapper.Map<Vendor[]>(await _stripmagClient.GetVendorsFromSupplierAsync());
+			var vendorsFromSite = _mapper.Map<Vendor[]>(await _loveberiClient.GetVendorsAsync());
+
+			var addSheet = _vendorService.GetSheetToAddAsync(vendorsFromSupplier, vendorsFromSite);
+
+			if (addSheet.Length > 0) await SendToSite(_mapper.Map<VendorAto[]>(addSheet), _loveberiClient.AddVendorsAsync);
 		}
 		
 		private async Task UpdateProducts()
@@ -61,7 +82,7 @@ namespace LBBaseUpdateService.Headless
 			var productsFromSupplier = _mapper.Map<Product[]>(await _stripmagClient.GetProductsFromSupplierAsync());
 			var productsFromSite = _mapper.Map<Product[]>(await _loveberiClient.GetAllProductsAsync());
 			var prodIdWithIeId = _mapper.Map<ProductIdWithInternalId[]>(await _loveberiClient.GetProductIdWithIeIdAsync());
-			var vendorsFromSite  = _mapper.Map<VendorId[]>(await _loveberiClient.GetVendorsAsync());
+			var vendorsFromSite  = _mapper.Map<VendorId[]>(await _loveberiClient.GetVendorsInternalIdWithExternalIdAsync());
 			var categoriesFromSite = _mapper.Map<Category[]>(await _loveberiClient.GetCategoriesAsync());
 
 			_productService.ChangeFieldVibration(productsFromSupplier);
