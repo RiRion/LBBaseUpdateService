@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Autofac;
 using LBBaseUpdateService.Common.DependencyInjection;
+using LBBaseUpdateService.Common.ProgresBar;
 using Microsoft.Extensions.Configuration;
 
 namespace LBBaseUpdateService.Headless
