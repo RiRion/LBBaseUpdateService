@@ -23,7 +23,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\..\BitrixService\src\BitrixService\BitrixService.csproj" />
       <ProjectReference Include="..\LBBaseUpdateService.BusinessLogic\LBBaseUpdateService.BusinessLogic.csproj" />
       <ProjectReference Include="..\LBBaseUpdateService.Common\LBBaseUpdateService.Common.csproj" />
     </ItemGroup>

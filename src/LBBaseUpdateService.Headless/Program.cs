@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Autofac;
 using LBBaseUpdateService.Common.DependencyInjection;
-using LBBaseUpdateService.Common.ProgresBar;
 using Microsoft.Extensions.Configuration;
 
 namespace LBBaseUpdateService.Headless
@@ -32,8 +31,8 @@ namespace LBBaseUpdateService.Headless
 			builder.RegisterAssemblyModules(Collector.GetAssemblies("BusinessLogic"));
 			builder.RegisterAssemblyModules(Collector.GetAssemblies("BitrixService"));
 			builder.RegisterType<ApplicationContext>();
-			builder.RegisterClientConfigurations(configuration, Collector.GetAssembly("BitrixService"));
-			
+			builder.RegisterClientConfigurations(configuration, Collector.GetAssembly("LBBaseUpdateService.BitrixService"));
+
 			return builder.Build();
 		}
 

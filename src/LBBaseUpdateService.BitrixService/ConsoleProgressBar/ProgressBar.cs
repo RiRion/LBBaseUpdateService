@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using System.Threading;
 
-namespace LBBaseUpdateService.Common.ProgresBar
+namespace BitrixService.ConsoleProgressBar
 {
     public class ProgressBar : IDisposable, IProgress<double> {
 		private const int blockCount = 10;

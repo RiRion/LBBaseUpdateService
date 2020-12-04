@@ -7,6 +7,7 @@ using Autofac;
 using AutoMapper;
 using BitrixService.Clients.Loveberi.Interfaces;
 using BitrixService.Clients.Stripmag.Interfaces;
+using BitrixService.ConsoleProgressBar;
 using BitrixService.Models.ApiModels;
 using LBBaseUpdateService.BusinessLogic.Services.Models;
 using LBBaseUpdateService.BusinessLogic.Services.OfferService.Interfaces;
@@ -16,7 +17,6 @@ using LBBaseUpdateService.BusinessLogic.Services.ProductService.Interfaces;
 using LBBaseUpdateService.BusinessLogic.Services.ProductService.Models;
 using LBBaseUpdateService.BusinessLogic.Services.VendorService.Interfaces;
 using LBBaseUpdateService.BusinessLogic.Services.VendorService.Models;
-using LBBaseUpdateService.Common.ProgresBar;
 
 namespace LBBaseUpdateService.Headless
 {
@@ -75,7 +75,7 @@ namespace LBBaseUpdateService.Headless
 
 			var addSheet = _vendorService.GetSheetToAddAsync(vendorsFromSupplier, vendorsFromSite);
 
-			if (addSheet.Length > 0) await SendToSite(_mapper.Map<VendorAto[]>(addSheet), _loveberiClient.AddVendorsAsync);
+			if (addSheet.Length > 0) await _loveberiClient.AddVendorsAsync(_mapper.Map<VendorAto[]>(addSheet));
 		}
 		
 		private async Task UpdateProducts()
@@ -102,9 +102,10 @@ namespace LBBaseUpdateService.Headless
 			
 			var watch = new Stopwatch();
 			watch.Start();
-			if (deleteSheet.Length > 0) await SendToSite(deleteSheet, _loveberiClient.DeleteProductsAsync);
-			if (addSheet.Length > 0) await SendToSite(_mapper.Map<ProductAto[]>(addSheet), _loveberiClient.AddProductsRangeAsync);
-			if (updateSheet.Length > 0) await SendToSite(_mapper.Map<ProductAto[]>(updateSheet), _loveberiClient.UpdateProductsAsync);
+			if (deleteSheet.Length > 0) await _loveberiClient.DeleteOffersWithStepAsync(deleteSheet);
+			if (addSheet.Length > 0)
+				await _loveberiClient.AddProductsRangeWithStepAsync(_mapper.Map<ProductAto[]>(addSheet));
+			if (updateSheet.Length > 0) await _loveberiClient.UpdateProductsWithStepAsync(_mapper.Map<ProductAto[]>(updateSheet));
 			watch.Stop();
 			Console.WriteLine($"Products update is completed. Time to completed {watch.ElapsedMilliseconds/1000} s.");
 		}
@@ -125,38 +126,13 @@ namespace LBBaseUpdateService.Headless
 
 			var watch = new Stopwatch();
 			watch.Start();
-			if (deleteIdSheet.Length > 0) await SendToSite(deleteIdSheet, _loveberiClient.DeleteOffersAsync);
+			if (deleteIdSheet.Length > 0) await _loveberiClient.DeleteOffersWithStepAsync(deleteIdSheet);
 			if (addSheet.Length > 0)
-				await SendToSite(_mapper.Map<OfferAto[]>(addSheet), _loveberiClient.AddOffersRangeAsync);
+				await _loveberiClient.AddOffersRangeWithStepAsync(_mapper.Map<OfferAto[]>(addSheet));
 			if (updateSheet.Length > 0)
-				await SendToSite(_mapper.Map<OfferAto[]>(updateSheet), _loveberiClient.UpdateOffersAsync);
+				await _loveberiClient.UpdateOffersWithStepAsync(_mapper.Map<OfferAto[]>(updateSheet));
 			watch.Stop();
 			Console.WriteLine($"Offers update is completed. Time to completed {watch.ElapsedMilliseconds/1000} s.");
-		}
-		
-		private async Task SendToSite<T>(T[] list, Func<T[], Task> action)
-		{
-			var methodName = action.Method.Name;
-			var i = 0;
-			var step = 100;
-			
-			Console.Write($"{methodName} ");
-			using (var progressBar = new ProgressBar())
-			{
-				do
-				{
-					if (list.Length - i < step)
-					{
-						step = list.Length - i;
-						i = list.Length;
-					}
-					else i += step;
-					await action(list.Skip(i - step).Take(step).ToArray());
-					progressBar.Report((double) i/ list.Length);
-				} while (i < list.Length);
-			}
-
-			Console.WriteLine("Done.");
 		}
 
 		// IDisposable ////////////////////////////////////////////////////////////////////////////

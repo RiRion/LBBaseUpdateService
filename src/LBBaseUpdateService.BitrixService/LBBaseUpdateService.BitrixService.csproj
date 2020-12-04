@@ -1,19 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <PackageVersion>1.0.7</PackageVersion>
+    <Authors>Rione</Authors>
+    <Company>AllDirect</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>BitrixService</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.2.0" />
-    <PackageReference Include="AutoMapper" Version="10.0.0" />
     <PackageReference Include="CsvHelper" Version="15.0.8" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LBBaseUpdateService.BitrixService\LBBaseUpdateService.BitrixService.csproj" />
+    <Folder Include="Clients" />
+    <Folder Include="Models" />
   </ItemGroup>
 
 </Project>
