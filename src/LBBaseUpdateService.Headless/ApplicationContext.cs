@@ -75,7 +75,7 @@ namespace LBBaseUpdateService.Headless
 
 			var addSheet = _vendorService.GetSheetToAddAsync(vendorsFromSupplier, vendorsFromSite);
 
-			if (addSheet.Length > 0) await _loveberiClient.AddVendorsAsync(_mapper.Map<VendorAto[]>(addSheet));
+			if (addSheet.Length > 0) await _loveberiClient.AddVendorsWithStepAsync(_mapper.Map<VendorAto[]>(addSheet));
 		}
 		
 		private async Task UpdateProducts()
