@@ -228,7 +228,7 @@ namespace BitrixService.Clients.Loveberi
 
         public async Task DeleteOffersWithStepAsync(int[] ids, int step = 100)
         {
-            Console.Write("Обновление торговых предложений: ");
+            Console.Write("Удаление неактуальных торговых предложений: ");
             await SendWithStep(ids, DeleteOffersAsync, 100);
             Console.WriteLine("Завершено.");
         }

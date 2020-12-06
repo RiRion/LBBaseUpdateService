@@ -7,7 +7,6 @@ using Autofac;
 using AutoMapper;
 using BitrixService.Clients.Loveberi.Interfaces;
 using BitrixService.Clients.Stripmag.Interfaces;
-using BitrixService.ConsoleProgressBar;
 using BitrixService.Models.ApiModels;
 using LBBaseUpdateService.BusinessLogic.Services.Models;
 using LBBaseUpdateService.BusinessLogic.Services.OfferService.Interfaces;
@@ -102,7 +101,7 @@ namespace LBBaseUpdateService.Headless
 			
 			var watch = new Stopwatch();
 			watch.Start();
-			if (deleteSheet.Length > 0) await _loveberiClient.DeleteOffersWithStepAsync(deleteSheet);
+			if (deleteSheet.Length > 0) await _loveberiClient.DeleteProductsWithStepAsync(deleteSheet);
 			if (addSheet.Length > 0)
 				await _loveberiClient.AddProductsRangeWithStepAsync(_mapper.Map<ProductAto[]>(addSheet));
 			if (updateSheet.Length > 0) await _loveberiClient.UpdateProductsWithStepAsync(_mapper.Map<ProductAto[]>(updateSheet));
