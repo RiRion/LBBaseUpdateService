@@ -81,10 +81,10 @@ namespace BitrixService.Clients.Loveberi
             }
         }
 
-        public async Task AddVendorsWithStepAsync(VendorAto[] vendors, int step = 100)
+        public async Task AddVendorsWithStepAsync(VendorAto[] vendors, int step = 50)
         {
             Console.Write("Добавление новых поставщиков: ");
-            await SendWithStep(vendors, AddVendorsAsync, 100);
+            await SendWithStep(vendors, AddVendorsAsync, step);
             Console.WriteLine("Завершено.");
         }
 
@@ -99,10 +99,10 @@ namespace BitrixService.Clients.Loveberi
             }
         }
 
-        public async Task DeleteWithStepVendors(int[] ids, int step = 100)
+        public async Task DeleteWithStepVendors(int[] ids, int step = 50)
         {
             Console.Write("Удаление ненужных поставщиков: ");
-            await SendWithStep(ids, DeleteVendorsAsync, 100);
+            await SendWithStep(ids, DeleteVendorsAsync, step);
             Console.WriteLine("Завершено.");
         }
         
@@ -135,7 +135,7 @@ namespace BitrixService.Clients.Loveberi
             }
         }
 
-        public async Task AddProductsRangeWithStepAsync(ProductAto[] products, int step = 100)
+        public async Task AddProductsRangeWithStepAsync(ProductAto[] products, int step = 50)
         {
             Console.Write("Добавление товаров: ");
             await SendWithStep(products, AddProductsRangeAsync, step);
@@ -154,7 +154,7 @@ namespace BitrixService.Clients.Loveberi
             }
         }
 
-        public async Task UpdateProductsWithStepAsync(ProductAto[] products, int step = 100)
+        public async Task UpdateProductsWithStepAsync(ProductAto[] products, int step = 50)
         {
             Console.Write("Обновление продуктов: ");
             await SendWithStep(products, UpdateProductsAsync, step);
@@ -169,7 +169,7 @@ namespace BitrixService.Clients.Loveberi
             }
         }
 
-        public async Task DeleteProductsWithStepAsync(int[] ids, int step = 100)
+        public async Task DeleteProductsWithStepAsync(int[] ids, int step = 50)
         {
             Console.Write("Удаление устаревших продуктов: ");
             await SendWithStep(ids, DeleteProductsAsync, step);
@@ -191,7 +191,7 @@ namespace BitrixService.Clients.Loveberi
             }
         }
 
-        public async Task AddOffersRangeWithStepAsync(OfferAto[] offers, int step = 100)
+        public async Task AddOffersRangeWithStepAsync(OfferAto[] offers, int step = 50)
         {
             Console.Write("Добавление новых торговых предложений: ");
             await SendWithStep(offers, AddOffersRangeAsync, step);
@@ -211,10 +211,10 @@ namespace BitrixService.Clients.Loveberi
             }
         }
 
-        public async Task UpdateOffersWithStepAsync(OfferAto[] offers, int step = 100)
+        public async Task UpdateOffersWithStepAsync(OfferAto[] offers, int step = 50)
         {
             Console.Write("Обновление торговых предложений: ");
-            await SendWithStep(offers, UpdateOffersAsync, 100);
+            await SendWithStep(offers, UpdateOffersAsync, step);
             Console.WriteLine("Завершено.");
         }
 
@@ -226,10 +226,10 @@ namespace BitrixService.Clients.Loveberi
             }
         }
 
-        public async Task DeleteOffersWithStepAsync(int[] ids, int step = 100)
+        public async Task DeleteOffersWithStepAsync(int[] ids, int step = 50)
         {
             Console.Write("Удаление неактуальных торговых предложений: ");
-            await SendWithStep(ids, DeleteOffersAsync, 100);
+            await SendWithStep(ids, DeleteOffersAsync, step);
             Console.WriteLine("Завершено.");
         }
         
