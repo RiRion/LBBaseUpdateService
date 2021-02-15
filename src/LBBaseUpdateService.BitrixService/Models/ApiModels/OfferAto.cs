@@ -3,7 +3,8 @@ namespace BitrixService.Models.ApiModels
     public class OfferAto
     {
         public int Id { get; set; } // offer ID
-        public int ProductId { get; set; } // prodid -> CML2_LINK (Property)
+        public int ProductIeId { get; set; } // prodid -> CML2_LINK (Property)
+        public int ProductExId { get; set; }
         public int XmlId { get; set; } // sku -> B_IBLOCK_ELEMENT.XML_ID
         public string Barcode { get; set; } // barcode -> barcode (Property)
         public string Name { get; set; } // name -> B_IBLOCK_ELEMENT.NAME

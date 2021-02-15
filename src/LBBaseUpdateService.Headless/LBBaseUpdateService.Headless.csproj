@@ -14,15 +14,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="TestData\Bitrix.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <Content Include="TestData\VendorsDictionary.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\LBBaseUpdateService.BusinessLogic\LBBaseUpdateService.BusinessLogic.csproj" />
       <ProjectReference Include="..\LBBaseUpdateService.Common\LBBaseUpdateService.Common.csproj" />
     </ItemGroup>

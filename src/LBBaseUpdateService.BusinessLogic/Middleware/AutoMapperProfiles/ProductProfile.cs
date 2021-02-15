@@ -12,7 +12,9 @@ namespace LBBaseUpdateService.BusinessLogic.Middleware.AutoMapperProfiles
                 .ReverseMap()
                 .ForPath(m => m.Categories, 
                     opt => opt.Ignore());
-            CreateMap<Product, ProductFromSupplierAto>().ReverseMap();
+            CreateMap<Product, ProductFromSupplierAto>()
+                .ReverseMap()
+                .ForMember(m=>m.Sale, opt => opt.Ignore());
         }
     }
 }

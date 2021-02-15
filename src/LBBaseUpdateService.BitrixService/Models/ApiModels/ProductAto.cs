@@ -1,8 +1,11 @@
+using System.Collections.Generic;
+
 namespace BitrixService.Models.ApiModels
 {
     public class ProductAto
     {
-        public int ProductId { get; set; } 
+        public int ProductIeId { get; set; }
+        public int ProductExId { get; set; } 
         public int VendorId { get; set; } 
         public string VendorCode { get; set; } 
         public string Name { get; set; } 
@@ -20,8 +23,8 @@ namespace BitrixService.Models.ApiModels
         public string Volume { get; set; }
         public string ModelYear { get; set; }
         public string InfoPrice { get; set; }
-        public int IeId { get; set; }
         public int VendorCountry { get; set; }
-        public string NewAndBestseller { get; set; }
+        public List<int> Offers { get; set; }
+        public int Sale { get; set; }
     }
 }

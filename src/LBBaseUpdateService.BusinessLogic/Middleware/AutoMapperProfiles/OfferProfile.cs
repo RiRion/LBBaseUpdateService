@@ -8,7 +8,9 @@ namespace LBBaseUpdateService.BusinessLogic.Middleware.AutoMapperProfiles
     {
         public OfferProfile()
         {
-            CreateMap<Offer, OfferAto>().ReverseMap();
+            CreateMap<Offer, OfferAto>()
+                .ForMember(m=>m.ProductExId, opt=>opt.Ignore())
+                .ReverseMap();
         }
     }
 }

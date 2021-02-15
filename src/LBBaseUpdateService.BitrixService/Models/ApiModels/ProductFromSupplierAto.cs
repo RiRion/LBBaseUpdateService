@@ -4,7 +4,8 @@ namespace BitrixService.Models.ApiModels
 {
     public class ProductFromSupplierAto
     {
-        public int ProductId { get; set; }
+        public string ProductIeId { get; set; }
+        public int ProductExId { get; set; }
         public int VendorId { get; set; }
         public string VendorCode { get; set; }
         public string Name { get; set; }
@@ -27,7 +28,6 @@ namespace BitrixService.Models.ApiModels
         public string ModelYear { get; set; }
         public string InfoPrice { get; set; }
         public string ImgStatus { get; set; }
-        public string IeId { get; set; }
         public int VendorCountry { get; set; }
         public string NewAndBestseller { get; set; }
     }

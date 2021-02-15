@@ -8,7 +8,7 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.TestData.Mapping
         public OfferMap()
         {
             Map(m => m.Id).Optional();
-            Map(m => m.ProductId).Name("prodid");
+            Map(m => m.ProductIeId).Name("prodid");
             Map(m => m.XmlId).Name("sku");
             Map(m => m.Barcode).Name("barcode");
             Map(m => m.Name).Name("name");

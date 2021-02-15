@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Autofac;
 using AutoMapper;
@@ -16,6 +17,7 @@ using LBBaseUpdateService.BusinessLogic.Services.ProductService.Interfaces;
 using LBBaseUpdateService.BusinessLogic.Services.ProductService.Models;
 using LBBaseUpdateService.BusinessLogic.Services.VendorService.Interfaces;
 using LBBaseUpdateService.BusinessLogic.Services.VendorService.Models;
+using Newtonsoft.Json;
 
 namespace LBBaseUpdateService.Headless
 {
@@ -28,6 +30,15 @@ namespace LBBaseUpdateService.Headless
 		private readonly IOfferService _offerService;
 		private readonly IProductService _productService;
 		private readonly IMapper _mapper;
+
+		private Product[] _productsFromSupplier;
+		private Product[] _productsFromSite;
+		private ProductIdWithInternalId[] _productIdWithInternalId;
+		private VendorId[] _vendorsFromSite;
+		private Category[] _categoriesFromSite;
+
+		private List<Offer> _offersFromSupplier;
+		private Offer[] _offersFromSite;
 
 
 		public ApplicationContext(
@@ -51,11 +62,32 @@ namespace LBBaseUpdateService.Headless
 
 
 		// FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////
+		private async Task InitProducts()
+		{
+			_productsFromSupplier = _mapper.Map<Product[]>(await _stripmagClient.GetProductsFromSupplierAsync());
+			_productsFromSite = _mapper.Map<Product[]>(await _loveberiClient.GetAllProductsAsync());
+			_productIdWithInternalId = _mapper.Map<ProductIdWithInternalId[]>(await _loveberiClient.GetProductIdWithIeIdAsync());
+			_vendorsFromSite  = _mapper.Map<VendorId[]>(await _loveberiClient.GetVendorsInternalIdWithExternalIdAsync());
+			_categoriesFromSite = _mapper.Map<Category[]>(await _loveberiClient.GetCategoriesAsync());
+		}
+
+		private async Task InitOffers()
+		{
+			_offersFromSupplier = _mapper.Map<List<Offer>>(await _stripmagClient.GetOffersFromSupplierAsync());
+			_offersFromSite = _mapper.Map<Offer[]>(await _loveberiClient.GetAllOffersAsync());
+		}
 		public async Task RunAsync()
 		{
 			try
 			{
 				_loveberiClient.Login();
+				
+				await InitProducts();
+				await InitOffers();
+				
+				UpdateOfferList();
+				UpdateProductList(); 
+				
 				await UpdateVendors();
 				// TODO: Require update categories.
 				await UpdateProducts();
@@ -72,64 +104,63 @@ namespace LBBaseUpdateService.Headless
 			var vendorsFromSupplier = _mapper.Map<Vendor[]>(await _stripmagClient.GetVendorsFromSupplierAsync());
 			var vendorsFromSite = _mapper.Map<Vendor[]>(await _loveberiClient.GetVendorsAsync());
 
-			var addSheet = _vendorService.GetSheetToAddAsync(vendorsFromSupplier, vendorsFromSite);
+			var addList = _vendorService.GetSheetToAddAsync(vendorsFromSupplier, vendorsFromSite);
 
-			if (addSheet.Length > 0) await _loveberiClient.AddVendorsWithStepAsync(_mapper.Map<VendorAto[]>(addSheet));
+			if (addList.Length > 0) await _loveberiClient.AddVendorsWithStepAsync(_mapper.Map<VendorAto[]>(addList));
 		}
-		
+
+		private void UpdateProductList()
+		{
+			_productService.ChangeFieldVibration(_productsFromSupplier);
+			_productService.ChangeFieldOffers(_productsFromSupplier); 
+			_productService.ChangeFieldIeId(_productsFromSupplier, _productIdWithInternalId); 
+			_productService.SetMainCategoryId(_productsFromSupplier, _categoriesFromSite); 
+			_productService.ChangeFieldVendorIdAndVendorCountry(_productsFromSupplier, _vendorsFromSite);
+			_productService.SetDiscount(_productsFromSupplier, _offersFromSupplier.ToArray());
+		}
+
+		private void UpdateOfferList()
+		{
+			// Нужно что то прилумать
+			_productIdWithInternalId = _mapper.Map<ProductIdWithInternalId[]>(_loveberiClient.GetProductIdWithIeIdAsync().GetAwaiter().GetResult());
+			
+			_offerService.DeleteOffersWithoutProduct(_offersFromSupplier, _productIdWithInternalId);
+			_offerService.ReplaceVendorProductIdWithInternalId(_offersFromSupplier, _productIdWithInternalId);
+		}
+
 		private async Task UpdateProducts()
 		{
-			var productsFromSupplier = _mapper.Map<Product[]>(await _stripmagClient.GetProductsFromSupplierAsync());
-			var productsFromSite = _mapper.Map<Product[]>(await _loveberiClient.GetAllProductsAsync());
-			var prodIdWithIeId = _mapper.Map<ProductIdWithInternalId[]>(await _loveberiClient.GetProductIdWithIeIdAsync());
-			var vendorsFromSite  = _mapper.Map<VendorId[]>(await _loveberiClient.GetVendorsInternalIdWithExternalIdAsync());
-			var categoriesFromSite = _mapper.Map<Category[]>(await _loveberiClient.GetCategoriesAsync());
-
-			_productService.ChangeFieldVibration(productsFromSupplier);
-			_productService.ChangeFieldNewAndBest(productsFromSupplier);
-			_productService.ChangeFieldIeId(productsFromSupplier, prodIdWithIeId);
-			_productService.SetMainCategoryId(productsFromSupplier, categoriesFromSite);
-			_productService.ChangeFieldVendorIdAndVendorCountry(productsFromSupplier, vendorsFromSite);
-
 			// TODO: delete repeating products id. Need to add product with several categories.
-			var withoutRepeatingProdId = productsFromSupplier.Distinct(new ProductIdComparer()).ToArray();
+			var withoutRepeatingProdId = _productsFromSupplier.Distinct(new ProductIdComparer()).ToArray();
 
-			var addSheet = withoutRepeatingProdId.Except(productsFromSite, new ProductIdComparer()).ToArray();
-			var updateSheet = _productService.GetProductSheetToUpdate(withoutRepeatingProdId, productsFromSite);
-			var deleteSheet = productsFromSite.Except(withoutRepeatingProdId, new ProductIdComparer())
-				.Select(p => p.IeId).ToArray();
+			var addList = withoutRepeatingProdId.Except(_productsFromSite, new ProductIdComparer()).ToArray();
+			var updateList = _productService.GetProductListToUpdate(withoutRepeatingProdId, _productsFromSite);
+			var deleteList = _productsFromSite.Except(withoutRepeatingProdId, new ProductIdComparer())
+				.Select(p => p.ProductIeId).ToArray();
 			
 			var watch = new Stopwatch();
 			watch.Start();
-			if (deleteSheet.Length > 0) await _loveberiClient.DeleteProductsWithStepAsync(deleteSheet);
-			if (addSheet.Length > 0)
-				await _loveberiClient.AddProductsRangeWithStepAsync(_mapper.Map<ProductAto[]>(addSheet));
-			if (updateSheet.Length > 0) await _loveberiClient.UpdateProductsWithStepAsync(_mapper.Map<ProductAto[]>(updateSheet));
+			if (deleteList.Length > 0) await _loveberiClient.DeleteProductsWithStepAsync(deleteList);
+			if (addList.Length > 0)
+				await _loveberiClient.AddProductsRangeWithStepAsync(_mapper.Map<ProductAto[]>(addList));
+			if (updateList.Length > 0) await _loveberiClient.UpdateProductsWithStepAsync(_mapper.Map<ProductAto[]>(updateList));
 			watch.Stop();
 			Console.WriteLine($"Products update is completed. Time to completed {watch.ElapsedMilliseconds/1000} s.");
 		}
 
 		private async Task UpdateOffers()
 		{
-			var offersFromSupplier = _mapper.Map<List<Offer>>(await _stripmagClient.GetOffersFromSupplierAsync());
-			var offersFromSite = _mapper.Map<Offer[]>(await _loveberiClient.GetAllOffersAsync());
-			var prodIdWithIeId = 
-				_mapper.Map<ProductIdWithInternalId[]>(await _loveberiClient.GetProductIdWithIeIdAsync());
-			
-			_offerService.DeleteOffersWithoutProduct(offersFromSupplier, prodIdWithIeId);
-			_offerService.ReplaceVendorProductIdWithInternalId(offersFromSupplier, prodIdWithIeId);
-			
-			var addSheet = _offerService.GetOfferSheetToAdd(offersFromSupplier.ToArray(), offersFromSite);
-			var updateSheet = _offerService.GetOffersSheetToUpdate(offersFromSupplier.ToArray(), offersFromSite);
-			var deleteIdSheet = _offerService.GetOffersIdToDelete(offersFromSupplier.ToArray(), offersFromSite);
+			var addList = _offerService.GetOfferListToAdd(_offersFromSupplier.ToArray(), _offersFromSite);
+			var updateList = _offerService.GetOfferListToUpdate(_offersFromSupplier.ToArray(), _offersFromSite);
+			var deleteIdList = _offerService.GetOffersIdToDelete(_offersFromSupplier.ToArray(), _offersFromSite);
 
 			var watch = new Stopwatch();
 			watch.Start();
-			if (deleteIdSheet.Length > 0) await _loveberiClient.DeleteOffersWithStepAsync(deleteIdSheet);
-			if (addSheet.Length > 0)
-				await _loveberiClient.AddOffersRangeWithStepAsync(_mapper.Map<OfferAto[]>(addSheet));
-			if (updateSheet.Length > 0)
-				await _loveberiClient.UpdateOffersWithStepAsync(_mapper.Map<OfferAto[]>(updateSheet));
+			if (deleteIdList.Length > 0) await _loveberiClient.DeleteOffersWithStepAsync(deleteIdList);
+			if (addList.Length > 0)
+				await _loveberiClient.AddOffersRangeWithStepAsync(_mapper.Map<OfferAto[]>(addList));
+			if (updateList.Length > 0)
+				await _loveberiClient.UpdateOffersWithStepAsync(_mapper.Map<OfferAto[]>(updateList));
 			watch.Stop();
 			Console.WriteLine($"Offers update is completed. Time to completed {watch.ElapsedMilliseconds/1000} s.");
 		}

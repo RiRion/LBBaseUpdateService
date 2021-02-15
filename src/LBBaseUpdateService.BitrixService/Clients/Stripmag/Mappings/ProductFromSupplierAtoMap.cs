@@ -8,7 +8,8 @@ namespace BitrixService.Clients.Stripmag.Mappings
     {
         public ProductFromSupplierAtoMap()
         {
-            Map(m => m.ProductId).Name("prodid");
+            Map(m => m.ProductIeId).Ignore();
+            Map(m => m.ProductExId).Name("prodid");
             Map(m => m.VendorId).Name("vendor_id");
             Map(m => m.VendorCode).Name("vendor_code");
             Map(m => m.Name).Name("name");
@@ -37,7 +38,7 @@ namespace BitrixService.Clients.Stripmag.Mappings
             Map(m => m.ModelYear).Name("modelyear");
             Map(m => m.InfoPrice).Name("infoprice");
             Map(m => m.ImgStatus).Name("img_status");
-            Map(m => m.IeId).Name("ieid").Optional();
+            Map(m => m.ProductIeId).Name("ieid").Optional();
             Map(m => m.VendorCountry).Name("vendor_country").Optional();
             Map(m => m.NewAndBestseller).Name("new__and_bestseller").Optional();
         }

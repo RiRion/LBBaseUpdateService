@@ -2,7 +2,7 @@ namespace BitrixService.Models.ApiModels
 {
     public class ProductIdWithInternalIdAto
     {
-        public int ProductId { get; set; }
-        public int IeId { get; set; }
+        public int ProductExId { get; set; }
+        public int ProductIeId { get; set; }
     }
 }

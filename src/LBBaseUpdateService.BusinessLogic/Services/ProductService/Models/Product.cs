@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LBBaseUpdateService.BusinessLogic.Services.ProductService.Models
 {
 	public class Product : IEquatable<Product>
 	{
-		public int ProductId { get; set; }
+		public int ProductIeId { get; set; }
+		public int ProductExId { get; set; }
 		public int VendorId { get; set; }
 		public string VendorCode { get; set; }
 		public string Name { get; set; }
@@ -28,15 +30,16 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService.Models
 		public string ModelYear { get; set; }
 		public string InfoPrice { get; set; }
 		public string ImgStatus { get; set; }
-		public int IeId { get; set; }
+		
 		public int VendorCountry { get; set; }
-		public string NewAndBestseller { get; set; }
+		public List<int> Offers { get; set; } = new List<int>();
+		public int Sale { get; set; }
 
 		public bool Equals(Product other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return ProductId == other.ProductId 
+			return ProductExId == other.ProductExId 
 			       && VendorId == other.VendorId 
 			       && VendorCode == other.VendorCode 
 			       && Name == other.Name 
@@ -53,7 +56,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService.Models
 			       && Volume == other.Volume 
 			       && ModelYear == other.ModelYear 
 			       && VendorCountry == other.VendorCountry 
-			       && NewAndBestseller == other.NewAndBestseller;
+			       && !Offers.Except(other.Offers).Any();
 		}
 
 		public override bool Equals(object obj)
@@ -67,7 +70,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService.Models
 		public override int GetHashCode()
 		{
 			var hashCode = new HashCode();
-			hashCode.Add(ProductId);
+			hashCode.Add(ProductExId);
 			hashCode.Add(VendorId);
 			hashCode.Add(VendorCode);
 			hashCode.Add(Name);
@@ -84,7 +87,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService.Models
 			hashCode.Add(Volume);
 			hashCode.Add(ModelYear);
 			hashCode.Add(VendorCountry);
-			hashCode.Add(NewAndBestseller);
+			hashCode.Add(Offers);
 			return hashCode.ToHashCode();
 		}
 	}

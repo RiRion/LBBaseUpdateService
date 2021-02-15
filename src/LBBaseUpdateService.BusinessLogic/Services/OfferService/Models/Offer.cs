@@ -5,7 +5,8 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService.Models
     public class Offer : IEquatable<Offer>
     {
         public int Id { get; set; }
-        public int ProductId { get; set; }
+        public int ProductIeId { get; set; }
+        public int ProductExId { get; set; }
         public int XmlId { get; set; }
         public string Barcode { get; set; }
         public string Name { get; set; }
@@ -25,7 +26,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService.Models
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return ProductId == other.ProductId 
+            return ProductIeId == other.ProductIeId 
                    && XmlId == other.XmlId 
                    && Barcode == other.Barcode 
                    && Name == other.Name 
@@ -53,7 +54,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService.Models
         public override int GetHashCode()
         {
             var hashCode = new HashCode();
-            hashCode.Add(ProductId);
+            hashCode.Add(ProductIeId);
             hashCode.Add(XmlId);
             hashCode.Add(Barcode);
             hashCode.Add(Name);

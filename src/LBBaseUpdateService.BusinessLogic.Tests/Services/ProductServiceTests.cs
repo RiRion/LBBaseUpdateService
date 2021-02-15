@@ -1,16 +1,30 @@
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
+using AutoMapper;
+using AutoMapper.Configuration;
+using BitrixService.Clients.Stripmag.Mappings;
+using BitrixService.Models.ApiModels;
+using CsvHelper;
+using CsvHelper.Configuration;
+using LBBaseUpdateService.BusinessLogic.Middleware.AutoMapperProfiles;
 using LBBaseUpdateService.BusinessLogic.Services.Models;
 using LBBaseUpdateService.BusinessLogic.Services.ProductService;
 using LBBaseUpdateService.BusinessLogic.Services.ProductService.Exceptions;
 using LBBaseUpdateService.BusinessLogic.Services.ProductService.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 
 namespace LBBaseUpdateService.BusinessLogic.Tests.Services
 {
     [TestClass]
     public class ProductServiceTests
     {
+        private string _pathProductFromSupplier = Directory.GetCurrentDirectory() + "/TestData/productFromSupplier.csv";
+        private string _pathProductFromSite = Directory.GetCurrentDirectory() + "/TestData/productFromSite.json";
+        
         [TestMethod]
         public void ChangeFieldVendorIdAndVendorCountryTests()
         {
@@ -82,23 +96,19 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
         public void ChangeFieldNewAndBestTests()
         {
             // Arrange
+            var mapperConfigurationExpression = new MapperConfigurationExpression();
+            mapperConfigurationExpression.AddProfile<ProductProfile>();
+            var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression);
+            var mapper = new Mapper(mapperConfiguration);
             var productService = new ProductService();
-            var products = new[]
-            {
-                new Product() {New = "1", Bestseller = "1"},
-                new Product() {New = "1", Bestseller = "0"},
-                new Product() {New = "0", Bestseller = "1"},
-                new Product() {New = "0", Bestseller = "0"}
-            };
+            var products = mapper.Map<Product[]>(ReadProductBySupplierFromCsv(_pathProductFromSupplier));
             
             // Act
-            productService.ChangeFieldNewAndBest(products);
+            productService.ChangeFieldOffers(products);
             
             // Assert
-            Assert.AreEqual(products.Count(p=>p.NewAndBestseller.Equals("Новинка Хит продаж")), 1);
-            Assert.AreEqual(products.Count(p=>p.NewAndBestseller.Equals("Новинка")), 1);
-            Assert.AreEqual(products.Count(p=>p.NewAndBestseller.Equals("Хит продаж")), 1);
-            Assert.AreEqual(products.Count(p=>p.NewAndBestseller.Equals("")), 1);
+            Assert.AreEqual(products.Count(p=>p.Offers.Contains(1834)), 3);
+            Assert.AreEqual(products.Count(p=>p.Offers.Contains(1836)), 3);
         }
 
         [TestMethod]
@@ -119,7 +129,7 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
             {
                 new Product() 
                     {
-                        ProductId = 1,
+                        ProductExId = 1,
                         Categories = new List<Category>()
                         {
                             new Category(){Name = "One"}, 
@@ -129,7 +139,7 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
                     },
                 new Product()
                     {
-                        ProductId = 2,
+                        ProductExId = 2,
                         Categories = new List<Category>()
                         {
                             new Category(){Name = "OneOne"},
@@ -139,7 +149,7 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
                     },
                 new Product()
                     {
-                        ProductId = 3,
+                        ProductExId = 3,
                         Categories = new List<Category>()
                         {
                             new Category(){Name = "TwoOne"},
@@ -167,7 +177,7 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
             {
                 new Product()
                 {
-                    ProductId = 1,
+                    ProductExId = 1,
                     Categories = new List<Category>()
                     {
                         new Category() {Name = "One"},
@@ -195,23 +205,23 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
             var productService = new ProductService();
             var products = new[]
             {
-                new Product(){ProductId = 1},
-                new Product(){ProductId = 2},
-                new Product(){ProductId = 3}
+                new Product(){ProductExId = 1},
+                new Product(){ProductExId = 2},
+                new Product(){ProductExId = 3}
             };
             var internalWithExternalId = new[]
             {
-                new ProductIdWithInternalId() {ProductId = 1, IeId = 201},
-                new ProductIdWithInternalId() {ProductId = 2, IeId = 202}
+                new ProductIdWithInternalId() {ProductExId = 1, ProductIeId = 201},
+                new ProductIdWithInternalId() {ProductExId = 2, ProductIeId = 202}
             };
             
             // Act
             productService.ChangeFieldIeId(products, internalWithExternalId);
             
             // Assert
-            Assert.AreEqual(products.Count(p=>p.IeId.Equals(201)), 1);
-            Assert.AreEqual(products.Count(p=>p.IeId.Equals(202)), 1);
-            Assert.AreEqual(products.Count(p=>p.IeId.Equals(0)), 1);
+            Assert.AreEqual(products.Count(p=>p.ProductIeId.Equals(201)), 1);
+            Assert.AreEqual(products.Count(p=>p.ProductIeId.Equals(202)), 1);
+            Assert.AreEqual(products.Count(p=>p.ProductIeId.Equals(0)), 1);
         }
 
         [TestMethod]
@@ -221,22 +231,44 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
             var productService = new ProductService();
             var externalProduct = new[]
             {
-                new Product(){ProductId = 1, Name = "Rider", Material = "soft"},
-                new Product(){ProductId = 2, Name = "Visual Studio", Material = "soft"},
-                new Product(){ProductId = 3, Name = "VS Code", Material = "soft"}
+                new Product(){ProductExId = 1, Name = "Rider", Material = "soft"},
+                new Product(){ProductExId = 2, Name = "Visual Studio", Material = "soft"},
+                new Product(){ProductExId = 3, Name = "VS Code", Material = "soft"}
             };
             var internalProduct = new[]
             {
-                new Product(){ProductId = 1, Name = "Rider", Material = "metal"},
-                new Product(){ProductId = 2, Name = "Visual studio", Material = "soft"},
-                new Product(){ProductId = 3, Name = "VS Code", Material = "soft"}
+                new Product(){ProductExId = 1, Name = "Rider", Material = "metal"},
+                new Product(){ProductExId = 2, Name = "Visual studio", Material = "soft"},
+                new Product(){ProductExId = 3, Name = "VS Code", Material = "soft"}
             };
             
             // Act
-            var updateSheet = productService.GetProductSheetToUpdate(externalProduct, internalProduct);
+            var updateSheet = productService.GetProductListToUpdate(externalProduct, internalProduct);
             
             // Assert
             Assert.AreEqual(updateSheet.Length, 2);
+        }
+
+        private ProductFromSupplierAto[] ReadProductBySupplierFromCsv(string path)
+        {
+            var configuration = new CsvConfiguration(CultureInfo.CurrentCulture)
+            {
+                Delimiter = ";",
+                HasHeaderRecord = true,
+                TrimOptions = TrimOptions.Trim,
+                BadDataFound = null,
+                Encoding = Encoding.UTF8
+            };
+            configuration.RegisterClassMap<ProductFromSupplierAtoMap>();
+            using var stream = new StreamReader(path);
+            using var csvReader = new CsvReader(stream, configuration);
+            return csvReader.GetRecords<ProductFromSupplierAto>().ToArray();
+        }
+
+        private ProductAto[] ReadProductBySiteFromJsonFile(string path)
+        {
+            using var stream = new StreamReader(path);
+            return JsonConvert.DeserializeObject<ProductAto[]>(stream.ReadToEnd());
         }
     }
 }

@@ -11,42 +11,42 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService
 {
     public class OfferService : IOfferService
     {
-        public void ReplaceVendorProductIdWithInternalId(List<Offer> offers, ProductIdWithInternalId[] idSheet)
+        public void ReplaceVendorProductIdWithInternalId(List<Offer> offers, ProductIdWithInternalId[] idList)
         {
             foreach (var offer in offers)
             {
-                var pair = idSheet.FirstOrDefault(
-                    p => p.ProductId == offer.ProductId);
+                var pair = idList.FirstOrDefault(
+                    p => p.ProductExId == offer.ProductExId);
                 if (pair is null) 
-                    throw new ProductIdNotFoundException($"Product with provided ID {offer.ProductId} not found.");
-                offer.ProductId = pair.IeId;
+                    throw new ProductIdNotFoundException($"Product with provided ID {offer.ProductIeId} not found.");
+                offer.ProductIeId = pair.ProductIeId;
             }
         }
 
         public void DeleteOffersWithoutProduct(List<Offer> offers, ProductIdWithInternalId[] idSheet)
         {
-            offers.RemoveAll(o => !idSheet.Any(i => i.ProductId.Equals(o.ProductId)));
+            offers.RemoveAll(o => !idSheet.Any(i => i.ProductExId.Equals(o.ProductExId)));
         }
         
-        public Offer[] GetOfferSheetToAdd(Offer[] vendorOffers, Offer[] internalOffers)
+        public Offer[] GetOfferListToAdd(Offer[] vendorOffers, Offer[] internalOffers)
         {
             return vendorOffers.Except(internalOffers, new OfferIdComparer()).ToArray();
         }
         
-        public Offer[] GetOffersSheetToUpdate(Offer[] vendorOffers, Offer[] internalOffers)
+        public Offer[] GetOfferListToUpdate(Offer[] vendorOffers, Offer[] internalOffers)
         {
-            var updateSheet = new List<Offer>();
+            var updateList = new List<Offer>();
             foreach (var offer in internalOffers)
             {
                 var vendorOffer = vendorOffers.FirstOrDefault(o => o.XmlId == offer.XmlId);
                 if (vendorOffer != null && !offer.Equals(vendorOffer))
                 {
                     vendorOffer.Id = offer.Id;
-                    updateSheet.Add(vendorOffer);
+                    updateList.Add(vendorOffer);
                 };
             }
 
-            return updateSheet.ToArray();
+            return updateList.ToArray();
         }
 
         public int[] GetOffersIdToDelete(Offer[] vendorOffers, Offer[] internalOffers)
