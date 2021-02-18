@@ -82,13 +82,15 @@ namespace LBBaseUpdateService.Headless
 			{
 				_loveberiClient.Login();
 				
+				await UpdateVendors();
+				
 				await InitProducts();
 				await InitOffers();
-				
+
 				UpdateOfferList();
 				UpdateProductList(); 
 				
-				await UpdateVendors();
+				
 				// TODO: Require update categories.
 				await UpdateProducts();
 				await UpdateOffers();
