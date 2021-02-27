@@ -26,8 +26,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService.Models
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return ProductIeId == other.ProductIeId 
-                   && XmlId == other.XmlId 
+            return XmlId == other.XmlId
                    && Barcode == other.Barcode 
                    && Name == other.Name 
                    && Quantity == other.Quantity 

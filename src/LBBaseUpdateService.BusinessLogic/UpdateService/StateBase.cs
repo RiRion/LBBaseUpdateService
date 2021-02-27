@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using LBBaseUpdateService.BusinessLogic.UpdateService.Interfaces;
 
 namespace LBBaseUpdateService.BusinessLogic.UpdateService
@@ -11,6 +12,6 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService
             _context = context;
         }
 
-        public abstract void Update();
+        public abstract Task UpdateAsync();
     }
 }

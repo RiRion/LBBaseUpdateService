@@ -10,6 +10,7 @@ using BitrixService.Models.ApiModels;
 using BitrixService.Clients.TypedHttp;
 using BitrixService.ConsoleProgressBar;
 using BitrixService.Models.ApiModels.ResponseModels;
+using Newtonsoft.Json;
 
 namespace BitrixService.Clients.Loveberi
 {
@@ -19,12 +20,20 @@ namespace BitrixService.Clients.Loveberi
         private readonly LoveberiClientConfig _clientConfig;
 
         // VENDORS Paths ///////////////////////////////////////////////////////////////////////////////////////////////
+        private const string AddVendorPath = "/AddVendor";
+        private const string UpdateVendorPath = "/UpdateVendor";
+        private const string DeleteVendor = "/DeleteVendor";
+
         private const string GetVendorsInternalIdWithExternalIdPath = "/GetVendorsId";
         private const string GetVendorsPath = "/GetVendors";
         private const string AddVendorsPath = "/AddVendors";
         private const string DeleteVendorsPath = "/DeleteVendors";
 
         // PRODUCTS Paths //////////////////////////////////////////////////////////////////////////////////////////////
+        private const string AddProductPath = "/AddProduct";
+        private const string UpdateProductPath = "/UpdateProduct";
+        private const string DeleteProductPath = "/DeleteProduct";
+        
         private const string GetAllProductsPath = "/GetAllProducts";
         private const string ProductIdWithIeIdPath = "/ProductIdWithIeId";
         private const string GetCategoriesPath = "/GetCategories";
@@ -75,6 +84,17 @@ namespace BitrixService.Clients.Loveberi
             return await GetObjectAsync<VendorAto[]>(BaseAddress + GetVendorsPath);
         }
 
+        public async Task<ApiResponse> AddVendor(VendorAto vendorAto)
+        {
+            using var response = await PostObjectAsync(BaseAddress + AddVendorPath, vendorAto);
+            return await DeserializeAsync<ApiResponse>(response, SerializerSettings);
+        }
+
+        public async Task<ApiResponse> AddVendorWithRetryAsync(VendorAto vendorAto, int countRetry = 10)
+        {
+            return await SendWithRetryAsync(vendorAto, AddVendor, countRetry);
+        }
+
         public async Task AddVendorsAsync(VendorAto[] vendors)
         {
             using (var response = await PostObjectAsync(BaseAddress + AddVendorsPath, vendors))
@@ -85,14 +105,14 @@ namespace BitrixService.Clients.Loveberi
                 }
             }
         }
-
+        
         public async Task AddVendorsWithStepAsync(VendorAto[] vendors, int step = 50)
         {
             Console.Write("Добавление новых поставщиков: ");
             await SendWithStep(vendors, AddVendorsAsync, step);
             Console.WriteLine("Завершено.");
         }
-
+        
         public async Task DeleteVendorsAsync(int[] ids)
         {
             using (var response = await DeleteObjectAsync(BaseAddress + DeleteVendorsPath, ids))
@@ -128,6 +148,17 @@ namespace BitrixService.Clients.Loveberi
             return await GetObjectAsync<CategoryAto[]>(BaseAddress + GetCategoriesPath);
         }
 
+        public async Task<ApiResponse> AddProduct(ProductAto productAto)
+        {
+            using var response = await PostObjectAsync(BaseAddress + AddProductPath, productAto);
+            return await DeserializeAsync<ApiResponse>(response, SerializerSettings);
+        }
+
+        public async Task<ApiResponse> AddProductWithRetryAsync(ProductAto productAto, int countRetry = 10)
+        {
+            return await SendWithRetryAsync(productAto, AddProduct, countRetry);
+        }
+        
         public async Task AddProductsRangeAsync(ProductAto[] products)
         {
             using (var response = await PostObjectAsync(BaseAddress + AddProductsRangePath, products))
@@ -147,6 +178,17 @@ namespace BitrixService.Clients.Loveberi
             Console.WriteLine("Завершено.");
         }
 
+        public async Task<ApiResponse> UpdateProduct(ProductAto productAto)
+        {
+            using var response = await PostObjectAsync(BaseAddress + UpdateProductPath, productAto);
+            return await DeserializeAsync<ApiResponse>(response, SerializerSettings);
+        }
+
+        public async Task<ApiResponse> UpdateProductWithRetryAsync(ProductAto productAto, int countRetry = 10)
+        {
+            return await SendWithRetryAsync(productAto, UpdateProduct, countRetry);
+        }
+        
         public async Task UpdateProductsAsync(ProductAto[] products)
         {
             using (var response = await PostObjectAsync(BaseAddress + UpdateProductsRangePath, products))
@@ -164,6 +206,17 @@ namespace BitrixService.Clients.Loveberi
             Console.Write("Обновление продуктов: ");
             await SendWithStep(products, UpdateProductsAsync, step);
             Console.WriteLine("Завершено.");
+        }
+
+        public async Task<ApiResponse> DeleteProduct(int exId)
+        {
+            using var response = await PostObjectAsync(BaseAddress + DeleteProductPath, exId);
+            return await DeserializeAsync<ApiResponse>(response, SerializerSettings);
+        }
+
+        public async Task<ApiResponse> DeleteProductWithRetryAsync(int exId, int countRetry = 10)
+        {
+            return await SendWithRetryAsync(exId, DeleteProduct, countRetry);
         }
         
         public async Task DeleteProductsAsync(int[] ids)
@@ -217,6 +270,7 @@ namespace BitrixService.Clients.Loveberi
         public async Task<ApiResponse> UpdateOfferAsync(OfferAto offer)
         {
             using var response = await PostObjectAsync(BaseAddress +  UpdateOfferPath, offer);
+            var str = await response.Content.ReadAsStringAsync();
             return await DeserializeAsync<ApiResponse>(response, SerializerSettings);
         }
 
@@ -245,15 +299,15 @@ namespace BitrixService.Clients.Loveberi
             Console.WriteLine("Завершено.");
         }
 
-        public async Task<ApiResponse> DeleteOfferAsync(OfferAto offer)
+        public async Task<ApiResponse> DeleteOfferAsync(int exId)
         {
-            using var response = await PostObjectAsync(BaseAddress + DeleteOfferPath, offer.XmlId);
+            using var response = await PostObjectAsync(BaseAddress + DeleteOfferPath, exId);
             return await DeserializeAsync<ApiResponse>(response, SerializerSettings);
         }
 
-        public async Task<ApiResponse> DeleteOfferWithRetry(OfferAto offer, int countRetry = 10)
+        public async Task<ApiResponse> DeleteOfferWithRetry(int exId, int countRetry = 10)
         {
-            return await SendWithRetryAsync(offer, DeleteOfferAsync, countRetry);
+            return await SendWithRetryAsync(exId, DeleteOfferAsync, countRetry);
         }
         
         public async Task DeleteOffersAsync(int[] ids)
@@ -296,7 +350,7 @@ namespace BitrixService.Clients.Loveberi
         private async Task<ApiResponse> SendWithRetryAsync<T>(T obj, Func<T, Task<ApiResponse>> action, int countRetry = 10)
         {
             var currentRetry = 0;
-            ApiResponse response;
+            ApiResponse response = new ApiResponse();
             do
             {
                 try
@@ -308,7 +362,7 @@ namespace BitrixService.Clients.Loveberi
                 {
                     await Task.Delay(new TimeSpan(0, 0, 10));
                     currentRetry++;
-                    throw;
+                    if (currentRetry == countRetry) throw;
                 }
             } while (currentRetry < countRetry);
 

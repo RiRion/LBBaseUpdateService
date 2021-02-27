@@ -11,18 +11,6 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService
 {
     public class OfferService : IOfferService
     {
-        public void ReplaceVendorProductIdWithInternalId(List<Offer> offers, ProductIdWithInternalId[] idList)
-        {
-            foreach (var offer in offers)
-            {
-                var pair = idList.FirstOrDefault(
-                    p => p.ProductExId == offer.ProductExId);
-                // if (pair is null) //очередной костыль
-                //      throw new ProductIdNotFoundException($"Product with provided ID {offer.ProductIeId} not found.");
-                if (pair != null) offer.ProductIeId = pair.ProductIeId;
-            }
-        }
-
         public void DeleteOffersWithoutProduct(List<Offer> offers, ProductIdWithInternalId[] idList)
         {
             offers.RemoveAll(o => !idList.Any(i => i.ProductExId.Equals(o.ProductExId)));

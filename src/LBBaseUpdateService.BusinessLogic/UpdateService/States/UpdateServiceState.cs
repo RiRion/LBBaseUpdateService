@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Autofac;
 using AutoMapper;
 using BitrixService.Clients.Loveberi.Interfaces;
+using BitrixService.Clients.Stripmag;
 using BitrixService.Clients.Stripmag.Interfaces;
 using LBBaseUpdateService.BusinessLogic.Services.OfferService.Interfaces;
 using LBBaseUpdateService.BusinessLogic.Services.OfferService.Models;
@@ -53,28 +54,19 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
             _productService = productService;
         }
         
-        public override async void Update()
+        public override async Task UpdateAsync()
         {
-            try
-            {
-                _loveberiClient.Login();
+            _loveberiClient.Login();
                 
-                //await InitVendorAsync();
-                //await InitProductAsync();
-                await InitOfferAsync();
+            // await InitVendorAsync();
+            // await InitProductAsync();
+            await InitOfferAsync();
                 
-                //UpdateVendorList();
-                //UpdateProductList();
-                UpdateOfferList();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            // UpdateVendorList();
+            // UpdateProductList();
+            UpdateOfferList();
             
             _context.TransitionTo(_context._lifetimeScope.Resolve<VendorUpdateState>());
-            _context._state.Update();
         }
         
         private async Task InitVendorAsync()

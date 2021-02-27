@@ -7,7 +7,7 @@ using LBBaseUpdateService.BusinessLogic.UpdateService.States;
 
 namespace LBBaseUpdateService.BusinessLogic
 {
-    public class UpdateContext : IDisposable
+    public class UpdateContext
     {
         public readonly VendorQueue _vendors;
         public readonly ProductQueue _products;
@@ -34,21 +34,11 @@ namespace LBBaseUpdateService.BusinessLogic
 
         public async Task UpdateAsync()
         {
-            try
+            TransitionTo(_lifetimeScope.Resolve<UpdateServiceState>());
+            while (_state != null)
             {
-                TransitionTo(_lifetimeScope.Resolve<UpdateServiceState>());
-                _state.Update();
+                await _state.UpdateAsync();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-
-        public void Dispose()
-        {
-            _lifetimeScope?.Dispose();
         }
     }
 }

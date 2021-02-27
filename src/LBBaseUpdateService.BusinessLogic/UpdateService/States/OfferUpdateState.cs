@@ -22,7 +22,7 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
             _mapper = mapper;
         }
         
-        public override async void Update()
+        public override async Task UpdateAsync()
         {
             _loveberiClient.Login();
             await UpdateSite();
@@ -40,28 +40,37 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
         {
             if (_context._offers.ListToAdd.Count > 0)
             {
-                for (int i = 0; i < _context._offers.ListToAdd.Count; i++)
+                while (_context._offers.ListToAdd.Count > 0)
                 {
                     var response = await _loveberiClient.AddOfferWithRetryAsync(
                         _mapper.Map<OfferAto>(_context._offers.ListToAdd.Peek()));
                     if (response.Status > 0)
                         _context._offers.ListToAdd.Dequeue();
-                    else throw new ApplicationException(response.ErrorMessage);
+                    else
+                    {
+                        //TODO: need log.
+                        //throw new ApplicationException(response.ErrorMessage);
+                        _context._offers.ListToAdd.Dequeue();
+                    }
                 }
             }
-            
         }
 
         private async Task UpdateOffers()
         {
             if (_context._offers.ListToUpdate.Count > 0)
             {
-                for (int i = 0; i < _context._offers.ListToUpdate.Count; i++)
+                while (_context._offers.ListToUpdate.Count > 0)
                 {
                     var response = await _loveberiClient.UpdateOfferWithRetryAsync(
                         _mapper.Map<OfferAto>(_context._offers.ListToUpdate.Peek()));
                     if (response.Status > 0) _context._offers.ListToUpdate.Dequeue();
-                    else throw new ApplicationException(response.ErrorMessage);
+                    else
+                    {
+                        //TODO: need log.
+                        //throw new ApplicationException(response.ErrorMessage);
+                        _context._offers.ListToUpdate.Dequeue();
+                    }
                 }
             }
         }
@@ -70,12 +79,16 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
         {
             if (_context._offers.ListToDelete.Count > 0)
             {
-                for (int i = 0; i < _context._offers.ListToDelete.Count; i++)
+                while (_context._offers.ListToDelete.Count > 0)
                 {
-                    var response = await _loveberiClient.DeleteOfferWithRetry(
-                        _mapper.Map<OfferAto>(_context._offers.ListToDelete.Peek()));
+                    var response = await _loveberiClient.DeleteOfferWithRetry(_context._offers.ListToDelete.Peek());
                     if (response.Status > 0) _context._offers.ListToDelete.Dequeue();
-                    else throw new ApplicationException(response.ErrorMessage);
+                    else
+                    {
+                        //TODO: need log.
+                        //throw new ApplicationException(response.ErrorMessage);
+                        _context._offers.ListToDelete.Dequeue();
+                    }
                 }
             }
         }

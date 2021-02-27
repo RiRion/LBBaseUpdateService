@@ -24,7 +24,7 @@ using Newtonsoft.Json;
 
 namespace LBBaseUpdateService.Headless
 {
-	internal sealed class ApplicationContext : IDisposable
+	internal sealed class ApplicationContext
 	{
 		private readonly ILifetimeScope _lifetimeScope;
 		private readonly ILoveberiClient _loveberiClient;
@@ -73,52 +73,17 @@ namespace LBBaseUpdateService.Headless
 			_vendorsFromSite  = _mapper.Map<VendorId[]>(await _loveberiClient.GetVendorsInternalIdWithExternalIdAsync());
 			_categoriesFromSite = _mapper.Map<Category[]>(await _loveberiClient.GetCategoriesAsync());
 		}
-
-		private async Task InitOffers()
-		{
-			_offersFromSupplier = _mapper.Map<List<Offer>>(await _stripmagClient.GetOffersFromSupplierAsync());
-			_offersFromSite = _mapper.Map<Offer[]>(await _loveberiClient.GetAllOffersAsync());
-		}
 		public async Task RunAsync()
 		{
 			try
 			{
-				// using var client = new HttpClient();
-				// using var response = await client.GetAsync("http://feed.p5s.ru/data/5d95eca8bec371.02477530?stock");
-				// var str = await response.Content.ReadAsStringAsync();
-				
 				await _lifetimeScope.Resolve<UpdateContext>().UpdateAsync();
-
-				// _loveberiClient.Login();
-				//
-				// await UpdateVendors();
-				//
-				// await InitProducts();
-				// await InitOffers();
-				//
-				// UpdateOfferList();
-				// UpdateProductList(); 
-
-
 				// TODO: Require update categories.
-				// await UpdateProducts();
-				// UpdateOfferList();
-				// await UpdateOffers();
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine($"Error: {e.Message}");
 			}
-		}
-
-		private async Task UpdateVendors()
-		{
-			var vendorsFromSupplier = _mapper.Map<Vendor[]>(await _stripmagClient.GetVendorsFromSupplierAsync());
-			var vendorsFromSite = _mapper.Map<Vendor[]>(await _loveberiClient.GetVendorsAsync());
-
-			var addList = _vendorService.GetListToAddAsync(vendorsFromSupplier, vendorsFromSite);
-
-			if (addList.Length > 0) await _loveberiClient.AddVendorsWithStepAsync(_mapper.Map<VendorAto[]>(addList));
 		}
 
 		private void UpdateProductList()
@@ -134,14 +99,11 @@ namespace LBBaseUpdateService.Headless
 		private void UpdateOfferList()
 		{
 			//_offerService.DeleteOffersWithoutProduct(_offersFromSupplier, _productIdWithInternalId);
-			_offerService.ReplaceVendorProductIdWithInternalId(_offersFromSupplier, _productIdWithInternalId);
 		}
 
 		private async void UpdateOffersBeforeLoadProduct()
 		{
-			_productIdWithInternalId = _mapper.Map<ProductIdWithInternalId[]>(await _loveberiClient.GetProductIdWithIeIdAsync());
 			_offerService.DeleteOffersWithoutProduct(_offersFromSupplier, _productIdWithInternalId);
-			_offerService.ReplaceVendorProductIdWithInternalId(_offersFromSupplier, _productIdWithInternalId);
 		}
 
 		private async Task UpdateProducts()
@@ -162,31 +124,6 @@ namespace LBBaseUpdateService.Headless
 			// if (updateList.Length > 0) await _loveberiClient.UpdateProductsWithStepAsync(_mapper.Map<ProductAto[]>(updateList));
 			// watch.Stop();
 			// Console.WriteLine($"Products update is completed. Time to completed {watch.ElapsedMilliseconds/1000} s.");
-		}
-
-		private async Task UpdateOffers()
-		{
-			UpdateOffersBeforeLoadProduct(); // костыль
-			
-			var addList = _offerService.GetOfferListToAdd(_offersFromSupplier.ToArray(), _offersFromSite);
-			var updateList = _offerService.GetOfferListToUpdate(_offersFromSupplier.ToArray(), _offersFromSite);
-			var deleteIdList = _offerService.GetOffersIdToDelete(_offersFromSupplier.ToArray(), _offersFromSite);
-
-			var watch = new Stopwatch();
-			watch.Start();
-			if (deleteIdList.Length > 0) await _loveberiClient.DeleteOffersWithStepAsync(deleteIdList);
-			if (addList.Length > 0)
-				await _loveberiClient.AddOffersRangeWithStepAsync(_mapper.Map<OfferAto[]>(addList));
-			if (updateList.Length > 0)
-				await _loveberiClient.UpdateOffersWithStepAsync(_mapper.Map<OfferAto[]>(updateList));
-			watch.Stop();
-			Console.WriteLine($"Offers update is completed. Time to completed {watch.ElapsedMilliseconds/1000} s.");
-		}
-
-		// IDisposable ////////////////////////////////////////////////////////////////////////////
-		public void Dispose()
-		{
-			_lifetimeScope?.Dispose();
 		}
 	}
 }
