@@ -11,7 +11,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
 {
     public class ProductService : IProductService
     {
-        public void ChangeFieldVendorIdAndVendorCountry(Product[] products, VendorId[] vendors)
+        public void ChangeFieldVendorIdAndVendorCountry(List<Product> products, VendorId[] vendors)
         {
             foreach(var product in products)
             {
@@ -25,7 +25,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
             }
         }
         
-        public void ChangeFieldVibration(Product[] products)
+        public void ChangeFieldVibration(List<Product> products)
         {
             foreach(var product in products)
             {
@@ -36,7 +36,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
             }
         }
         
-        public void ChangeFieldOffers(Product[] products)
+        public void ChangeFieldOffers(List<Product> products)
         {
             foreach(var item in products)
             {
@@ -52,12 +52,12 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
             }
         }
 
-        public void SetDiscount(Product[] products, Offer[] offers)
+        public void SetDiscount(List<Product> products, List<Offer> offers)
         {
 	        foreach (var product in products)
 	        {
 		        var offer = offers.FirstOrDefault(o => o.ProductExId.Equals(product.ProductExId));
-		        if (offer != null)
+		        if (offer != null && offer.StopPromo == 0)
 		        {
 			        if (offer.Price * 0.9 - offer.BaseWholePrice > 500)
 			        {
@@ -87,7 +87,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
 	        }
         }
         
-        public void SetMainCategoryId(Product[] products, Category[] categories)
+        public void SetMainCategoryId(List<Product> products, List<Category> categories)
         		{
         			foreach (var product in products)
                     {
@@ -108,7 +108,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
                     }
         		}
         
-        public void ChangeFieldIeId(Product[] products, ProductIdWithInternalId[] ieId)
+        public void ChangeFieldIeId(List<Product> products, ProductIdWithInternalId[] ieId)
         {
 	        foreach(var product in products)
 	        {
@@ -117,7 +117,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
 	        }
         }
 
-        public Product[] GetProductListToUpdate(Product[] externalProducts, Product[] internalProducts)
+        public Product[] GetProductListToUpdate(List<Product> externalProducts, List<Product> internalProducts)
         {
 	        var updateSheet = new List<Product>();
 	        foreach (var product in internalProducts)
@@ -132,7 +132,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
 	        return updateSheet.ToArray();
         }
 
-        public void SetCategoryId(Category category, Category[] categoriesFromSite)
+        public void SetCategoryId(Category category, List<Category> categoriesFromSite)
         {
 	        category.Name = category.Name.Trim();
 	        var categoryFromSite = categoriesFromSite.FirstOrDefault(

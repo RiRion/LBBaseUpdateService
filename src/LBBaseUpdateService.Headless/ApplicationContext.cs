@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Autofac;
@@ -9,6 +11,7 @@ using AutoMapper;
 using BitrixService.Clients.Loveberi.Interfaces;
 using BitrixService.Clients.Stripmag.Interfaces;
 using BitrixService.Models.ApiModels;
+using LBBaseUpdateService.BusinessLogic;
 using LBBaseUpdateService.BusinessLogic.Services.Models;
 using LBBaseUpdateService.BusinessLogic.Services.OfferService.Interfaces;
 using LBBaseUpdateService.BusinessLogic.Services.OfferService.Models;
@@ -80,20 +83,27 @@ namespace LBBaseUpdateService.Headless
 		{
 			try
 			{
-				_loveberiClient.Login();
+				// using var client = new HttpClient();
+				// using var response = await client.GetAsync("http://feed.p5s.ru/data/5d95eca8bec371.02477530?stock");
+				// var str = await response.Content.ReadAsStringAsync();
 				
-				await UpdateVendors();
-				
-				await InitProducts();
-				await InitOffers();
+				await _lifetimeScope.Resolve<UpdateContext>().UpdateAsync();
 
-				UpdateOfferList();
-				UpdateProductList(); 
-				
-				
+				// _loveberiClient.Login();
+				//
+				// await UpdateVendors();
+				//
+				// await InitProducts();
+				// await InitOffers();
+				//
+				// UpdateOfferList();
+				// UpdateProductList(); 
+
+
 				// TODO: Require update categories.
-				await UpdateProducts();
-				await UpdateOffers();
+				// await UpdateProducts();
+				// UpdateOfferList();
+				// await UpdateOffers();
 			}
 			catch (Exception e)
 			{
@@ -106,26 +116,30 @@ namespace LBBaseUpdateService.Headless
 			var vendorsFromSupplier = _mapper.Map<Vendor[]>(await _stripmagClient.GetVendorsFromSupplierAsync());
 			var vendorsFromSite = _mapper.Map<Vendor[]>(await _loveberiClient.GetVendorsAsync());
 
-			var addList = _vendorService.GetSheetToAddAsync(vendorsFromSupplier, vendorsFromSite);
+			var addList = _vendorService.GetListToAddAsync(vendorsFromSupplier, vendorsFromSite);
 
 			if (addList.Length > 0) await _loveberiClient.AddVendorsWithStepAsync(_mapper.Map<VendorAto[]>(addList));
 		}
 
 		private void UpdateProductList()
 		{
-			_productService.ChangeFieldVibration(_productsFromSupplier);
-			_productService.ChangeFieldOffers(_productsFromSupplier); 
-			_productService.ChangeFieldIeId(_productsFromSupplier, _productIdWithInternalId); 
-			_productService.SetMainCategoryId(_productsFromSupplier, _categoriesFromSite); 
-			_productService.ChangeFieldVendorIdAndVendorCountry(_productsFromSupplier, _vendorsFromSite);
-			_productService.SetDiscount(_productsFromSupplier, _offersFromSupplier.ToArray());
+			// _productService.ChangeFieldVibration(_productsFromSupplier);
+			// _productService.ChangeFieldOffers(_productsFromSupplier); 
+			// _productService.ChangeFieldIeId(_productsFromSupplier, _productIdWithInternalId); 
+			// _productService.SetMainCategoryId(_productsFromSupplier, _categoriesFromSite); 
+			// _productService.ChangeFieldVendorIdAndVendorCountry(_productsFromSupplier, _vendorsFromSite);
+			// _productService.SetDiscount(_productsFromSupplier, _offersFromSupplier.ToArray());
 		}
 
 		private void UpdateOfferList()
 		{
-			// Нужно что то прилумать
-			_productIdWithInternalId = _mapper.Map<ProductIdWithInternalId[]>(_loveberiClient.GetProductIdWithIeIdAsync().GetAwaiter().GetResult());
-			
+			//_offerService.DeleteOffersWithoutProduct(_offersFromSupplier, _productIdWithInternalId);
+			_offerService.ReplaceVendorProductIdWithInternalId(_offersFromSupplier, _productIdWithInternalId);
+		}
+
+		private async void UpdateOffersBeforeLoadProduct()
+		{
+			_productIdWithInternalId = _mapper.Map<ProductIdWithInternalId[]>(await _loveberiClient.GetProductIdWithIeIdAsync());
 			_offerService.DeleteOffersWithoutProduct(_offersFromSupplier, _productIdWithInternalId);
 			_offerService.ReplaceVendorProductIdWithInternalId(_offersFromSupplier, _productIdWithInternalId);
 		}
@@ -133,25 +147,27 @@ namespace LBBaseUpdateService.Headless
 		private async Task UpdateProducts()
 		{
 			// TODO: delete repeating products id. Need to add product with several categories.
-			var withoutRepeatingProdId = _productsFromSupplier.Distinct(new ProductIdComparer()).ToArray();
-
-			var addList = withoutRepeatingProdId.Except(_productsFromSite, new ProductIdComparer()).ToArray();
-			var updateList = _productService.GetProductListToUpdate(withoutRepeatingProdId, _productsFromSite);
-			var deleteList = _productsFromSite.Except(withoutRepeatingProdId, new ProductIdComparer())
-				.Select(p => p.ProductIeId).ToArray();
+			// var withoutRepeatingProdId = _productsFromSupplier.Distinct(new ProductIdComparer()).ToArray();
+			//
+			// var addList = withoutRepeatingProdId.Except(_productsFromSite, new ProductIdComparer()).ToArray();
+			// var updateList = _productService.GetProductListToUpdate(withoutRepeatingProdId, _productsFromSite);
+			// var deleteList = _productsFromSite.Except(withoutRepeatingProdId, new ProductIdComparer())
+				// .Select(p => p.ProductIeId).ToArray();
 			
-			var watch = new Stopwatch();
-			watch.Start();
-			if (deleteList.Length > 0) await _loveberiClient.DeleteProductsWithStepAsync(deleteList);
-			if (addList.Length > 0)
-				await _loveberiClient.AddProductsRangeWithStepAsync(_mapper.Map<ProductAto[]>(addList));
-			if (updateList.Length > 0) await _loveberiClient.UpdateProductsWithStepAsync(_mapper.Map<ProductAto[]>(updateList));
-			watch.Stop();
-			Console.WriteLine($"Products update is completed. Time to completed {watch.ElapsedMilliseconds/1000} s.");
+			// var watch = new Stopwatch();
+			// watch.Start();
+			// if (deleteList.Length > 0) await _loveberiClient.DeleteProductsWithStepAsync(deleteList);
+			// if (addList.Length > 0)
+			// 	await _loveberiClient.AddProductsRangeWithStepAsync(_mapper.Map<ProductAto[]>(addList));
+			// if (updateList.Length > 0) await _loveberiClient.UpdateProductsWithStepAsync(_mapper.Map<ProductAto[]>(updateList));
+			// watch.Stop();
+			// Console.WriteLine($"Products update is completed. Time to completed {watch.ElapsedMilliseconds/1000} s.");
 		}
 
 		private async Task UpdateOffers()
 		{
+			UpdateOffersBeforeLoadProduct(); // костыль
+			
 			var addList = _offerService.GetOfferListToAdd(_offersFromSupplier.ToArray(), _offersFromSite);
 			var updateList = _offerService.GetOfferListToUpdate(_offersFromSupplier.ToArray(), _offersFromSite);
 			var deleteIdList = _offerService.GetOffersIdToDelete(_offersFromSupplier.ToArray(), _offersFromSite);

@@ -8,7 +8,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.VendorService
 {
     public class VendorService : IVendorService
     {
-        public Vendor[] GetSheetToAddAsync(Vendor[] externalVendors, Vendor[] internalVendors)
+        public Vendor[] GetListToAddAsync(Vendor[] externalVendors, Vendor[] internalVendors)
         {
             return externalVendors.Except(internalVendors, new VendorByIdComparer())
                 .ToArray();

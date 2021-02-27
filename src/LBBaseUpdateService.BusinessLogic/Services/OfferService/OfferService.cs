@@ -17,15 +17,15 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService
             {
                 var pair = idList.FirstOrDefault(
                     p => p.ProductExId == offer.ProductExId);
-                if (pair is null) 
-                    throw new ProductIdNotFoundException($"Product with provided ID {offer.ProductIeId} not found.");
-                offer.ProductIeId = pair.ProductIeId;
+                // if (pair is null) //очередной костыль
+                //      throw new ProductIdNotFoundException($"Product with provided ID {offer.ProductIeId} not found.");
+                if (pair != null) offer.ProductIeId = pair.ProductIeId;
             }
         }
 
-        public void DeleteOffersWithoutProduct(List<Offer> offers, ProductIdWithInternalId[] idSheet)
+        public void DeleteOffersWithoutProduct(List<Offer> offers, ProductIdWithInternalId[] idList)
         {
-            offers.RemoveAll(o => !idSheet.Any(i => i.ProductExId.Equals(o.ProductExId)));
+            offers.RemoveAll(o => !idList.Any(i => i.ProductExId.Equals(o.ProductExId)));
         }
         
         public Offer[] GetOfferListToAdd(Offer[] vendorOffers, Offer[] internalOffers)

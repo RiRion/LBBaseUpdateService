@@ -9,6 +9,7 @@ using BitrixService.Clients.Loveberi.Models.Config;
 using BitrixService.Models.ApiModels;
 using BitrixService.Clients.TypedHttp;
 using BitrixService.ConsoleProgressBar;
+using BitrixService.Models.ApiModels.ResponseModels;
 
 namespace BitrixService.Clients.Loveberi
 {
@@ -32,6 +33,10 @@ namespace BitrixService.Clients.Loveberi
         private const string UpdateProductsRangePath = "/UpdateProductsRange";
         
         // OFFERS Paths ////////////////////////////////////////////////////////////////////////////////////////////////
+        private const string AddOfferPath = "/AddOffer";
+        private const string UpdateOfferPath = "/UpdateOffer";
+        private const string DeleteOfferPath = "/DeleteOffer";
+        
         private const string GetAllOffersPath = "/GetAllOffers";
         private const string AddOffersRangPath = "/AddOffersRange";
         private const string UpdateOffersPath = "/UpdateOffers";
@@ -183,6 +188,17 @@ namespace BitrixService.Clients.Loveberi
             return await GetObjectAsync<OfferAto[]>(BaseAddress + GetAllOffersPath);
         }
 
+        public async Task<ApiResponse> AddOfferAsync(OfferAto offer)
+        {
+            using var response = await PostObjectAsync(BaseAddress + AddOfferPath, offer);
+            return await DeserializeAsync<ApiResponse>(response, SerializerSettings);
+        }
+
+        public async Task<ApiResponse> AddOfferWithRetryAsync(OfferAto offer, int countRetry = 10)
+        {
+            return await SendWithRetryAsync(offer, AddOfferAsync, countRetry);
+        }
+
         public async Task AddOffersRangeAsync(OfferAto[] offers)
         {
             using (var response = PostObjectAsync(BaseAddress + AddOffersRangPath, offers))
@@ -196,6 +212,17 @@ namespace BitrixService.Clients.Loveberi
             Console.Write("Добавление новых торговых предложений: ");
             await SendWithStep(offers, AddOffersRangeAsync, step);
             Console.WriteLine("Завершено.");
+        }
+
+        public async Task<ApiResponse> UpdateOfferAsync(OfferAto offer)
+        {
+            using var response = await PostObjectAsync(BaseAddress +  UpdateOfferPath, offer);
+            return await DeserializeAsync<ApiResponse>(response, SerializerSettings);
+        }
+
+        public async Task<ApiResponse> UpdateOfferWithRetryAsync(OfferAto offer, int countRetry = 10)
+        {
+            return await SendWithRetryAsync(offer, UpdateOfferAsync, countRetry);
         }
 
         public async Task UpdateOffersAsync(OfferAto[] offers)
@@ -218,6 +245,17 @@ namespace BitrixService.Clients.Loveberi
             Console.WriteLine("Завершено.");
         }
 
+        public async Task<ApiResponse> DeleteOfferAsync(OfferAto offer)
+        {
+            using var response = await PostObjectAsync(BaseAddress + DeleteOfferPath, offer.XmlId);
+            return await DeserializeAsync<ApiResponse>(response, SerializerSettings);
+        }
+
+        public async Task<ApiResponse> DeleteOfferWithRetry(OfferAto offer, int countRetry = 10)
+        {
+            return await SendWithRetryAsync(offer, DeleteOfferAsync, countRetry);
+        }
+        
         public async Task DeleteOffersAsync(int[] ids)
         {
             using (var response = PostObjectAsync(BaseAddress + DeleteOffersPath, ids))
@@ -253,6 +291,28 @@ namespace BitrixService.Clients.Loveberi
                     progressBar.Report((double) i/ list.Length);
                 } while (i < list.Length); 
             }
+        }
+
+        private async Task<ApiResponse> SendWithRetryAsync<T>(T obj, Func<T, Task<ApiResponse>> action, int countRetry = 10)
+        {
+            var currentRetry = 0;
+            ApiResponse response;
+            do
+            {
+                try
+                {
+                    response = await action(obj);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    await Task.Delay(new TimeSpan(0, 0, 10));
+                    currentRetry++;
+                    throw;
+                }
+            } while (currentRetry < countRetry);
+
+            return response;
         }
     }
 }

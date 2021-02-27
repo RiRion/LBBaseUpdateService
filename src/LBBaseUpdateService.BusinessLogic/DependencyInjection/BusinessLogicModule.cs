@@ -23,6 +23,14 @@ namespace LBBaseUpdateService.BusinessLogic.DependencyInjection
 				.Where(p => p.Name.EndsWith("Service") || p.IsClass)
 				.AsSelf()
 				.AsImplementedInterfaces();
+			
+			builder
+				.RegisterAssemblyTypes(_currentAssembly)
+				.Where(p => p.Name.EndsWith("State") || p.IsClass)
+				.AsSelf()
+				.AsImplementedInterfaces();
+
+			builder.RegisterType<UpdateContext>();
 		}
 	}
 }
