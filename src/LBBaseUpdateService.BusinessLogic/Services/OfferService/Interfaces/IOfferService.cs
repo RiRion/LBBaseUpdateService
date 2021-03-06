@@ -6,9 +6,9 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService.Interfaces
 {
     public interface IOfferService
     {
-        Offer[] GetOfferListToAdd(Offer[] vendorOffers, Offer[] internalOffers);
-        Offer[] GetOfferListToUpdate(Offer[] vendorOffers, Offer[] internalOffers);
-        int[] GetOffersIdToDelete(Offer[] vendorOffers, Offer[] internalOffers);
-        void DeleteOffersWithoutProduct(List<Offer> offers, ProductIdWithInternalId[] idList);
+        IEnumerable<Offer> GetOfferListToAdd(List<Offer> vendorOffers, List<Offer> internalOffers);
+        IEnumerable<Offer> GetOfferListToUpdate(List<Offer> vendorOffers, List<Offer> internalOffers);
+        int[] GetOffersIdToDelete(List<Offer> vendorOffers, List<Offer> internalOffers);
+        void DeleteOffersWithoutProduct(List<Offer> offers, List<Product> products);
     }
 }

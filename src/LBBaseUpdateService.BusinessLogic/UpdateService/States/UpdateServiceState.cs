@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using AutoMapper;
 using BitrixService.Clients.Loveberi.Interfaces;
-using BitrixService.Clients.Stripmag;
 using BitrixService.Clients.Stripmag.Interfaces;
 using LBBaseUpdateService.BusinessLogic.Services.OfferService.Interfaces;
 using LBBaseUpdateService.BusinessLogic.Services.OfferService.Models;
@@ -28,11 +26,9 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
 
         private Vendor[] _vendorsFromSupplier;
         private Vendor[] _vendorsFromSite;
-        private VendorId[] _vendorIdFromSite;
         
         private Product[] _productsFromSupplier;
         private Product[] _productsFromSite;
-        private ProductIdWithInternalId[] _productIdWithInternalId;
         private List<Category> _categoriesFromSite;
         private List<Offer> _offersFromSupplier;
         private Offer[] _offersFromSite;
@@ -58,12 +54,12 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
         {
             _loveberiClient.Login();
                 
-            // await InitVendorAsync();
-            // await InitProductAsync();
+            await InitVendorAsync();
+            await InitProductAsync();
             await InitOfferAsync();
                 
-            // UpdateVendorList();
-            // UpdateProductList();
+            UpdateVendorList();
+            UpdateProductList();
             UpdateOfferList();
             
             _context.TransitionTo(_context._lifetimeScope.Resolve<VendorUpdateState>());
@@ -79,12 +75,10 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
         {
             _productsFromSupplier = _mapper.Map<Product[]>(await _stripmagClient.GetProductsFromSupplierAsync());
             _productsFromSite = _mapper.Map<Product[]>(await _loveberiClient.GetAllProductsAsync());
-            _productIdWithInternalId = _mapper.Map<ProductIdWithInternalId[]>(await _loveberiClient.GetProductIdWithIeIdAsync());
-            _vendorIdFromSite  = _mapper.Map<VendorId[]>(await _loveberiClient.GetVendorsInternalIdWithExternalIdAsync());
             _categoriesFromSite = _mapper.Map<List<Category>>(await _loveberiClient.GetCategoriesAsync());
             
             // TODO: delete repeating products id. Need to add product with several categories.
-            _context._products.Data.AddRange(_productsFromSupplier.Distinct(new ProductIdComparer()));
+            _context.Products.Data.AddRange(_productsFromSupplier.Distinct(new ProductIdComparer()));
         }
 
         private async Task InitOfferAsync()
@@ -92,35 +86,44 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
             _offersFromSupplier = _mapper.Map<List<Offer>>(await _stripmagClient.GetOffersFromSupplierAsync());
             _offersFromSite = _mapper.Map<Offer[]>(await _loveberiClient.GetAllOffersAsync());
             
-            _context._offers.Data.AddRange(_offersFromSupplier);
+            _context.Offers.Data.AddRange(_offersFromSupplier);
         }
 
         private void UpdateVendorList()
         {
             var addList = _vendorService.GetListToAddAsync(_vendorsFromSupplier, _vendorsFromSite);
 
-            foreach (var vendor in addList) _context._vendors.ListToAdd.Enqueue(vendor);
+            foreach (var vendor in addList) _context.Vendors.ListToAdd.Enqueue(vendor);
         }
 
         private void UpdateProductList()
         {
-            _productService.ChangeFieldVibration(_context._products.Data);
-            _productService.ChangeFieldOffers(_context._products.Data); 
-            _productService.ChangeFieldIeId(_context._products.Data, _productIdWithInternalId); 
-            _productService.SetMainCategoryId(_context._products.Data, _categoriesFromSite); 
-            _productService.ChangeFieldVendorIdAndVendorCountry(_context._products.Data, _vendorIdFromSite);
-            _productService.SetDiscount(_context._products.Data, _context._offers.Data);
+            _productService.ChangeFieldVibration(_context.Products.Data);
+            _productService.ChangeFieldOffers(_context.Products.Data);
+            _productService.SetMainCategoryId(_context.Products.Data, _categoriesFromSite);
+            _productService.SetDiscount(_context.Products.Data, _context.Offers.Data);
+
+            var addList = _context.Products.Data.Except(_productsFromSite, new ProductIdComparer()).ToArray();
+            var updateList = _productService.GetProductListToUpdate(_context.Products.Data, _productsFromSite.ToList());
+            var deleteList = _productsFromSite.Except(_context.Products.Data, new ProductIdComparer())
+            .Select(p => p.ProductIeId).ToArray();
+
+            foreach (var product in addList) _context.Products.ListToAdd.Enqueue(product);
+            foreach (var product in updateList) _context.Products.ListToUpdate.Enqueue(product);
+            foreach (var product in deleteList) _context.Products.ListToDelete.Enqueue(product);
         }
 
         private void UpdateOfferList()
         {
-            var addList = _offerService.GetOfferListToAdd(_offersFromSupplier.ToArray(), _offersFromSite);
-            var updateList = _offerService.GetOfferListToUpdate(_offersFromSupplier.ToArray(), _offersFromSite);
-            var deleteIdList = _offerService.GetOffersIdToDelete(_offersFromSupplier.ToArray(), _offersFromSite);
+            _offerService.DeleteOffersWithoutProduct(_context.Offers.Data, _context.Products.Data);
             
-            foreach (var offer in addList) _context._offers.ListToAdd.Enqueue(offer);
-            foreach (var offer in updateList) _context._offers.ListToUpdate.Enqueue(offer);
-            foreach (var id in deleteIdList) _context._offers.ListToDelete.Enqueue(id);
+            var addList = _offerService.GetOfferListToAdd(_context.Offers.Data, _offersFromSite.ToList());
+            var updateList = _offerService.GetOfferListToUpdate(_context.Offers.Data, _offersFromSite.ToList());
+            var deleteIdList = _offerService.GetOffersIdToDelete(_context.Offers.Data, _offersFromSite.ToList());
+            
+            foreach (var offer in addList) _context.Offers.ListToAdd.Enqueue(offer);
+            foreach (var offer in updateList) _context.Offers.ListToUpdate.Enqueue(offer);
+            foreach (var id in deleteIdList) _context.Offers.ListToDelete.Enqueue(id);
         }
     }
 }

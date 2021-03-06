@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac;
 using AutoMapper;
@@ -29,26 +30,28 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
 
         private async Task UpdateSite()
         {
-            await AddProducts();
-            await UpdateProducts();
-            await DeleteProducts();
+            await Task.WhenAll(
+                AddProducts(),
+                UpdateProducts(),
+                DeleteProducts()
+                );
         }
 
         private async Task AddProducts()
         {
-            if (_context._products.ListToAdd.Count > 0)
+            if (_context.Products.ListToAdd.Count > 0)
             {
-                while (_context._products.ListToAdd.Count > 0)
+                while (_context.Products.ListToAdd.Count > 0)
                 {
                     var response = await _loveberiClient.AddProductWithRetryAsync(
-                        _mapper.Map<ProductAto>(_context._products.ListToAdd.Peek()));
+                        _mapper.Map<ProductAto>(_context.Products.ListToAdd.Peek()));
                     if (response.Status > 0)
-                        _context._products.ListToAdd.Dequeue();
+                        _context.Products.ListToAdd.Dequeue();
                     else
                     {
                         //TODO: need log.
                         //throw new ApplicationException(response.ErrorMessage);
-                        _context._products.ListToAdd.Dequeue();
+                        _context.Products.ListToAdd.Dequeue();
                     }
                 }
             }
@@ -56,18 +59,18 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
 
         private async Task UpdateProducts()
         {
-            if (_context._products.ListToUpdate.Count > 0)
+            if (_context.Products.ListToUpdate.Count > 0)
             {
-                while (_context._products.ListToUpdate.Count > 0)
+                while (_context.Products.ListToUpdate.Count > 0)
                 {
                     var response = await _loveberiClient.UpdateProductWithRetryAsync(
-                        _mapper.Map<ProductAto>(_context._products.ListToUpdate.Peek()));
-                    if (response.Status > 0) _context._products.ListToUpdate.Dequeue();
+                        _mapper.Map<ProductAto>(_context.Products.ListToUpdate.Peek()));
+                    if (response.Status > 0) _context.Products.ListToUpdate.Dequeue();
                     else
                     {
                         //TODO: need log.
                         //throw new ApplicationException(response.ErrorMessage);
-                        _context._products.ListToUpdate.Dequeue();
+                        _context.Products.ListToUpdate.Dequeue();
                     }
                 }
             }
@@ -75,17 +78,17 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
 
         private async Task DeleteProducts()
         {
-            if (_context._products.ListToDelete.Count > 0)
+            if (_context.Products.ListToDelete.Count > 0)
             {
-                while (_context._products.ListToDelete.Count > 0)
+                while (_context.Products.ListToDelete.Count > 0)
                 {
-                    var response = await _loveberiClient.DeleteProductWithRetryAsync(_context._products.ListToDelete.Peek());
-                    if (response.Status > 0) _context._products.ListToDelete.Dequeue();
+                    var response = await _loveberiClient.DeleteProductWithRetryAsync(_context.Products.ListToDelete.Peek());
+                    if (response.Status > 0) _context.Products.ListToDelete.Dequeue();
                     else
                     {
                         //TODO: need log.
                         //throw new ApplicationException(response.ErrorMessage);
-                        _context._products.ListToDelete.Dequeue();
+                        _context.Products.ListToDelete.Dequeue();
                     }
                 }
             }

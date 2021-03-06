@@ -10,7 +10,6 @@ using BitrixService.Models.ApiModels;
 using BitrixService.Clients.TypedHttp;
 using BitrixService.ConsoleProgressBar;
 using BitrixService.Models.ApiModels.ResponseModels;
-using Newtonsoft.Json;
 
 namespace BitrixService.Clients.Loveberi
 {
@@ -151,6 +150,7 @@ namespace BitrixService.Clients.Loveberi
         public async Task<ApiResponse> AddProduct(ProductAto productAto)
         {
             using var response = await PostObjectAsync(BaseAddress + AddProductPath, productAto);
+            var str = await response.Content.ReadAsStringAsync();
             return await DeserializeAsync<ApiResponse>(response, SerializerSettings);
         }
 

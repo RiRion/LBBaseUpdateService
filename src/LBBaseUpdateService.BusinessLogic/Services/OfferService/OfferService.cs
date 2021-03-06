@@ -11,17 +11,17 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService
 {
     public class OfferService : IOfferService
     {
-        public void DeleteOffersWithoutProduct(List<Offer> offers, ProductIdWithInternalId[] idList)
+        public void DeleteOffersWithoutProduct(List<Offer> offers, List<Product> products)
         {
-            offers.RemoveAll(o => !idList.Any(i => i.ProductExId.Equals(o.ProductExId)));
+            offers.RemoveAll(o => !products.Any(p => p.ProductExId.Equals(o.ProductExId)));
         }
         
-        public Offer[] GetOfferListToAdd(Offer[] vendorOffers, Offer[] internalOffers)
+        public IEnumerable<Offer> GetOfferListToAdd(List<Offer> vendorOffers, List<Offer> internalOffers)
         {
-            return vendorOffers.Except(internalOffers, new OfferIdComparer()).ToArray();
+            return vendorOffers.Except(internalOffers, new OfferIdComparer());
         }
         
-        public Offer[] GetOfferListToUpdate(Offer[] vendorOffers, Offer[] internalOffers)
+        public IEnumerable<Offer> GetOfferListToUpdate(List<Offer> vendorOffers, List<Offer> internalOffers)
         {
             var updateList = new List<Offer>();
             foreach (var offer in internalOffers)
@@ -34,10 +34,10 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService
                 };
             }
 
-            return updateList.ToArray();
+            return updateList;
         }
 
-        public int[] GetOffersIdToDelete(Offer[] vendorOffers, Offer[] internalOffers)
+        public int[] GetOffersIdToDelete(List<Offer> vendorOffers, List<Offer> internalOffers)
         {
             return internalOffers.Except(vendorOffers, new OfferIdComparer())
                 .Select(o => o.Id).ToArray();

@@ -39,7 +39,7 @@ namespace BitrixService.Clients.Stripmag.Mappings
             Map(m => m.InfoPrice).Name("infoprice");
             Map(m => m.ImgStatus).Name("img_status");
             Map(m => m.ProductIeId).Name("ieid").Optional();
-            Map(m => m.VendorCountry).Name("vendor_country").Optional();
+            Map(m => m.VendorCountry).Name("vendor_id");
             Map(m => m.NewAndBestseller).Name("new__and_bestseller").Optional();
         }
     }

@@ -11,6 +11,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
 {
     public class ProductService : IProductService
     {
+	    [Obsolete]
         public void ChangeFieldVendorIdAndVendorCountry(List<Product> products, VendorId[] vendors)
         {
             foreach(var product in products)
@@ -108,6 +109,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
                     }
         		}
         
+        [Obsolete]
         public void ChangeFieldIeId(List<Product> products, ProductIdWithInternalId[] ieId)
         {
 	        foreach(var product in products)
@@ -132,7 +134,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.ProductService
 	        return updateSheet.ToArray();
         }
 
-        public void SetCategoryId(Category category, List<Category> categoriesFromSite)
+        private void SetCategoryId(Category category, List<Category> categoriesFromSite)
         {
 	        category.Name = category.Name.Trim();
 	        var categoryFromSite = categoriesFromSite.FirstOrDefault(

@@ -1,10 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using BitrixService.Clients.Loveberi.Interfaces;
 using BitrixService.Models.ApiModels;
-using BitrixService.Models.ApiModels.ResponseModels;
-using LBBaseUpdateService.BusinessLogic.UpdateService.Interfaces;
 
 namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
 {
@@ -26,31 +25,33 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
         {
             _loveberiClient.Login();
             await UpdateSite();
-            _context._state = null;
+            _context.State = null;
         }
 
         private async Task UpdateSite()
         {
-            await AddOffers();
-            await UpdateOffers();
-            await DeleteOffers();
+            await Task.WhenAll(
+                AddOffers(), 
+                UpdateOffers(), 
+                DeleteOffers()
+                );
         }
 
         private async Task AddOffers()
         {
-            if (_context._offers.ListToAdd.Count > 0)
+            if (_context.Offers.ListToAdd.Count > 0)
             {
-                while (_context._offers.ListToAdd.Count > 0)
+                while (_context.Offers.ListToAdd.Count > 0)
                 {
                     var response = await _loveberiClient.AddOfferWithRetryAsync(
-                        _mapper.Map<OfferAto>(_context._offers.ListToAdd.Peek()));
+                        _mapper.Map<OfferAto>(_context.Offers.ListToAdd.Peek()));
                     if (response.Status > 0)
-                        _context._offers.ListToAdd.Dequeue();
+                        _context.Offers.ListToAdd.Dequeue();
                     else
                     {
                         //TODO: need log.
                         //throw new ApplicationException(response.ErrorMessage);
-                        _context._offers.ListToAdd.Dequeue();
+                        _context.Offers.ListToAdd.Dequeue();
                     }
                 }
             }
@@ -58,18 +59,18 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
 
         private async Task UpdateOffers()
         {
-            if (_context._offers.ListToUpdate.Count > 0)
+            if (_context.Offers.ListToUpdate.Count > 0)
             {
-                while (_context._offers.ListToUpdate.Count > 0)
+                while (_context.Offers.ListToUpdate.Count > 0)
                 {
                     var response = await _loveberiClient.UpdateOfferWithRetryAsync(
-                        _mapper.Map<OfferAto>(_context._offers.ListToUpdate.Peek()));
-                    if (response.Status > 0) _context._offers.ListToUpdate.Dequeue();
+                        _mapper.Map<OfferAto>(_context.Offers.ListToUpdate.Peek()));
+                    if (response.Status > 0) _context.Offers.ListToUpdate.Dequeue();
                     else
                     {
                         //TODO: need log.
                         //throw new ApplicationException(response.ErrorMessage);
-                        _context._offers.ListToUpdate.Dequeue();
+                        _context.Offers.ListToUpdate.Dequeue();
                     }
                 }
             }
@@ -77,17 +78,17 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
 
         private async Task DeleteOffers()
         {
-            if (_context._offers.ListToDelete.Count > 0)
+            if (_context.Offers.ListToDelete.Count > 0)
             {
-                while (_context._offers.ListToDelete.Count > 0)
+                while (_context.Offers.ListToDelete.Count > 0)
                 {
-                    var response = await _loveberiClient.DeleteOfferWithRetry(_context._offers.ListToDelete.Peek());
-                    if (response.Status > 0) _context._offers.ListToDelete.Dequeue();
+                    var response = await _loveberiClient.DeleteOfferWithRetry(_context.Offers.ListToDelete.Peek());
+                    if (response.Status > 0) _context.Offers.ListToDelete.Dequeue();
                     else
                     {
                         //TODO: need log.
                         //throw new ApplicationException(response.ErrorMessage);
-                        _context._offers.ListToDelete.Dequeue();
+                        _context.Offers.ListToDelete.Dequeue();
                     }
                 }
             }

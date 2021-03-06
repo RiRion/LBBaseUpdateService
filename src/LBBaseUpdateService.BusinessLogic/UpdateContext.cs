@@ -9,35 +9,34 @@ namespace LBBaseUpdateService.BusinessLogic
 {
     public class UpdateContext
     {
-        public readonly VendorQueue _vendors;
-        public readonly ProductQueue _products;
-        public readonly OfferQueue _offers;
-
+        public VendorQueue Vendors { get; }
+        public ProductQueue Products { get; }
+        public OfferQueue Offers { get; }
+        public IState State { get; set; }
+        
         internal readonly ILifetimeScope _lifetimeScope;
-
-        public IState _state;
 
         public UpdateContext(ILifetimeScope lifetimeScope)
         {
             _lifetimeScope = lifetimeScope;
             
-            _vendors = new VendorQueue();
-            _products = new ProductQueue();
-            _offers = new OfferQueue();
+            Vendors = new VendorQueue();
+            Products = new ProductQueue();
+            Offers = new OfferQueue();
         }
 
         public void TransitionTo(IState state)
         {
-            _state = state;
-            _state.SetContext(this);
+            State = state;
+            State.SetContext(this);
         }
 
         public async Task UpdateAsync()
         {
             TransitionTo(_lifetimeScope.Resolve<UpdateServiceState>());
-            while (_state != null)
+            while (State != null)
             {
-                await _state.UpdateAsync();
+                await State.UpdateAsync();
             }
         }
     }

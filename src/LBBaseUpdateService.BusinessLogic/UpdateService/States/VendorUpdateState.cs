@@ -29,26 +29,27 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
 
         private async Task UpdateSiteAsync()
         {
-            await AddVendorsAsync();
-            await UpdateVendorsAsync();
-            await DeleteVendorsAsync();
+            await Task.WhenAll(AddVendorsAsync(),
+                UpdateVendorsAsync(),
+                DeleteVendorsAsync()
+                );
         }
 
         private async Task AddVendorsAsync()
         {
-            if (_context._vendors.ListToAdd.Count > 0)
+            if (_context.Vendors.ListToAdd.Count > 0)
             {
-                while (_context._vendors.ListToAdd.Count > 0)
+                while (_context.Vendors.ListToAdd.Count > 0)
                 {
                     var response = await _loveberiClient.AddVendorWithRetryAsync(
-                        _mapper.Map<VendorAto>(_context._vendors.ListToAdd.Peek()));
+                        _mapper.Map<VendorAto>(_context.Vendors.ListToAdd.Peek()));
                     if (response.Status > 0)
-                        _context._vendors.ListToAdd.Dequeue();
+                        _context.Vendors.ListToAdd.Dequeue();
                     else
                     {
                         //TODO: need log.
                         //throw new ApplicationException(response.ErrorMessage);
-                        _context._vendors.ListToAdd.Dequeue();
+                        _context.Vendors.ListToAdd.Dequeue();
                     }
                 }
             }

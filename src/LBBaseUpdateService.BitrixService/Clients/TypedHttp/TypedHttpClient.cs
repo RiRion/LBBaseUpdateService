@@ -13,7 +13,7 @@ namespace BitrixService.Clients.TypedHttp
 {
     public class TypedHttpClient : HttpClient, ITypedHttpClient
     {
-        public JsonSerializerSettings SerializerSettings { get; set; }
+        public JsonSerializerSettings SerializerSettings { get; }
 
         public TypedHttpClient()
         {
