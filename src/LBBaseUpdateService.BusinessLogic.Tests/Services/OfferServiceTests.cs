@@ -18,45 +18,6 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
     public class OfferServiceTests
     {
         [TestMethod]
-        public void ReplaceVendorProductIdWithInternalIdTests()
-        {
-            // Arrange
-            var offerService = new OfferService();
-            var offers = new List<Offer>();
-            offers.Add(new Offer(){ProductExId = 1});
-            offers.Add(new Offer(){ProductExId = 2});
-            offers.Add(new Offer(){ProductExId = 3});
-            var ids = new[]
-            {
-                new ProductIdWithInternalId() {ProductExId = 1, ProductIeId = 11},
-                new ProductIdWithInternalId() {ProductExId = 2, ProductIeId = 11},
-                new ProductIdWithInternalId() {ProductExId = 3, ProductIeId = 11}
-            };
-            // Act
-            offerService.ReplaceVendorProductIdWithInternalId(offers, ids);
-            // Assert
-            Assert.IsTrue(offers.All(o=>o.ProductIeId.Equals(11)));
-        }
-
-        [TestMethod]
-        public void ProductIdNotFoundExc_ReplaceVendorProductIdWithInternalIdTests()
-        {
-            // Arrange
-            var offerService = new OfferService();
-            var offers = new List<Offer>();
-            offers.Add(new Offer(){ProductIeId = 1});
-            offers.Add(new Offer(){ProductIeId = 2});
-            var ids = new[]
-            {
-                new ProductIdWithInternalId() {ProductExId = 1, ProductIeId = 11},
-                new ProductIdWithInternalId() {ProductExId = 3, ProductIeId = 11}
-            };
-            // Assert
-            Assert.ThrowsException<ProductIdNotFoundException>(() =>
-                offerService.ReplaceVendorProductIdWithInternalId(offers, ids));
-        }
-
-        [TestMethod]
         public void DeleteOffersWithoutProductTests()
         {
             // Arrange
@@ -67,10 +28,10 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
             offers.Add(new Offer() {ProductIeId = 3});
             offers.Add(new Offer() {ProductIeId = 4});
                 
-            var ids = new[]
+            var ids = new List<Product>()
             {
-                new ProductIdWithInternalId() {ProductExId = 1, ProductIeId = 11},
-                new ProductIdWithInternalId() {ProductExId = 2, ProductIeId = 12}
+                new Product() {ProductExId = 1, ProductIeId = 11},
+                new Product() {ProductExId = 2, ProductIeId = 12}
             };
             
             // Act
@@ -86,12 +47,12 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
             // Arrange
             var offerService = new OfferService();
             var basePath = Directory.GetCurrentDirectory();
-            var offerFromSupplier = GetOffersFromCsv(basePath + "/TestData/offersFromSupplier.csv");
-            var offerFromSite = GetOffersFromCsv(basePath + "/TestData/offersFromSite.csv");
+            var offerFromSupplier = GetOffersFromCsv(basePath + "/TestData/offersFromSupplier.csv").ToList();
+            var offerFromSite = GetOffersFromCsv(basePath + "/TestData/offersFromSite.csv").ToList();
             // Act 
             var list = offerService.GetOfferListToAdd(offerFromSupplier, offerFromSite);
             // Assert
-            Assert.AreEqual(list.Length, 2);
+            Assert.AreEqual(list.Count(), 2);
         }
 
         [TestMethod]
@@ -100,12 +61,12 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
             // Arrange
             var offerService = new OfferService();
             var basePath = Directory.GetCurrentDirectory();
-            var offerFromSupplier = GetOffersFromCsv(basePath + "/TestData/offersFromSupplier.csv");
-            var offerFromSite = GetOffersFromCsv(basePath + "/TestData/offersFromSite.csv");
+            var offerFromSupplier = GetOffersFromCsv(basePath + "/TestData/offersFromSupplier.csv").ToList();
+            var offerFromSite = GetOffersFromCsv(basePath + "/TestData/offersFromSite.csv").ToList();
             // Act 
             var list = offerService.GetOfferListToUpdate(offerFromSupplier, offerFromSite);
             // Assert
-            Assert.AreEqual(list.Length, 10);
+            Assert.AreEqual(list.Count(), 10);
         }
 
         [TestMethod]
@@ -114,8 +75,8 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
             // Arrange
             var offerService = new OfferService();
             var basePath = Directory.GetCurrentDirectory();
-            var offerFromSupplier = GetOffersFromCsv(basePath + "/TestData/offersFromSupplier.csv");
-            var offerFromSite = GetOffersFromCsv(basePath + "/TestData/offersFromSite.csv");
+            var offerFromSupplier = GetOffersFromCsv(basePath + "/TestData/offersFromSupplier.csv").ToList();
+            var offerFromSite = GetOffersFromCsv(basePath + "/TestData/offersFromSite.csv").ToList();
             // Act 
             var idToDelete = offerService.GetOffersIdToDelete(offerFromSupplier, offerFromSite);
             // Assert

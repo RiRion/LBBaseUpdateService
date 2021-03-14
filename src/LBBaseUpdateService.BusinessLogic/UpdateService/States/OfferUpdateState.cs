@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using BitrixService.Clients.Loveberi.Interfaces;
@@ -93,7 +91,5 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
                 }
             }
         }
-        
-        
     }
 }

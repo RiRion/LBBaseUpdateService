@@ -24,59 +24,13 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
     {
         private string _pathProductFromSupplier = Directory.GetCurrentDirectory() + "/TestData/productFromSupplier.csv";
         private string _pathProductFromSite = Directory.GetCurrentDirectory() + "/TestData/productFromSite.json";
-        
-        [TestMethod]
-        public void ChangeFieldVendorIdAndVendorCountryTests()
-        {
-            // Arrange
-            ProductService productService = new ProductService();
-            var products = new Product[]
-            {
-                new Product(){VendorId = 1}, 
-                new Product(){VendorId = 12}, 
-                new Product(){VendorId = 12}
-            };
-            var vendors = new VendorId[]
-            {
-                new VendorId(){ExternalId = 1, InternalId = 24}, 
-                new VendorId(){ExternalId = 12, InternalId = 25}
-            };
-            
-            // Act
-            productService.ChangeFieldVendorIdAndVendorCountry(products, vendors);
-            
-            // Assert
-            Assert.AreEqual(products.Count(p=>p.VendorId == 24), 1);
-            Assert.AreEqual(products.Count(p=>p.VendorId.Equals(25)), 2);
-            Assert.AreEqual(products.Count(p=>p.VendorCountry.Equals(1)), 1);
-            Assert.AreEqual(products.Count(p=>p.VendorCountry.Equals(12)), 2);
-        }
-
-        [TestMethod]
-        public void VendorNotFoundException_ChangeFieldVendorIdAndVendorCountryTests()
-        {
-            //Arrange
-            var productService = new ProductService();
-            var products = new[]
-            {
-                new Product() { VendorId = 1}
-            };
-            var vendors = new[]
-            {
-                new VendorId() {ExternalId = 2, InternalId = 3}
-            };
-            
-            // Act & Assert
-            Assert.ThrowsException<VendorIdNotFoundException>(() =>
-                productService.ChangeFieldVendorIdAndVendorCountry(products, vendors));
-        }
 
         [TestMethod]
         public void ChangeFieldVibrationTests()
         {
             // Arrange
             var productService = new ProductService();
-            var products = new[]
+            var products = new List<Product>()
             {
                 new Product() {Vibration = "0"},
                 new Product() {Vibration = "1"},
@@ -101,7 +55,7 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
             var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression);
             var mapper = new Mapper(mapperConfiguration);
             var productService = new ProductService();
-            var products = mapper.Map<Product[]>(ReadProductBySupplierFromCsv(_pathProductFromSupplier));
+            var products = mapper.Map<List<Product>>(ReadProductBySupplierFromCsv(_pathProductFromSupplier));
             
             // Act
             productService.ChangeFieldOffers(products);
@@ -116,7 +70,7 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
         {
             // Arrange
             var productService = new ProductService();
-            var categories = new[]
+            var categories = new List<Category>()
             {
                 new Category() {Id = 1, Name = "One", ParentId = 0},
                 new Category() {Id = 2, Name = "Two", ParentId = 1},
@@ -125,7 +79,7 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
                 new Category() {Id = 12, Name = "OneTwo", ParentId = 11},
                 new Category() {Id = 21, Name = "TwoOne", ParentId = 0}
             };
-            var products = new[]
+            var products = new List<Product>()
             {
                 new Product() 
                     {
@@ -173,7 +127,7 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
         {
             // Arrange
             var productService = new ProductService();
-            var products = new[]
+            var products = new List<Product>()
             {
                 new Product()
                 {
@@ -186,7 +140,7 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
                     }
                 }
             };
-            var categories = new[]
+            var categories = new List<Category>()
             {
                 new Category() {Id = 1, Name = "One", ParentId = 0},
                 new Category() {Id = 2, Name = "Two", ParentId = 1},
@@ -199,43 +153,17 @@ namespace LBBaseUpdateService.BusinessLogic.Tests.Services
         }
 
         [TestMethod]
-        public void ChangeFieldIeIdTests()
-        {
-            // Arrange
-            var productService = new ProductService();
-            var products = new[]
-            {
-                new Product(){ProductExId = 1},
-                new Product(){ProductExId = 2},
-                new Product(){ProductExId = 3}
-            };
-            var internalWithExternalId = new[]
-            {
-                new ProductIdWithInternalId() {ProductExId = 1, ProductIeId = 201},
-                new ProductIdWithInternalId() {ProductExId = 2, ProductIeId = 202}
-            };
-            
-            // Act
-            productService.ChangeFieldIeId(products, internalWithExternalId);
-            
-            // Assert
-            Assert.AreEqual(products.Count(p=>p.ProductIeId.Equals(201)), 1);
-            Assert.AreEqual(products.Count(p=>p.ProductIeId.Equals(202)), 1);
-            Assert.AreEqual(products.Count(p=>p.ProductIeId.Equals(0)), 1);
-        }
-
-        [TestMethod]
         public void GetProductSheetToUpdateTests()
         {
             // Arrange
             var productService = new ProductService();
-            var externalProduct = new[]
+            var externalProduct = new List<Product>()
             {
                 new Product(){ProductExId = 1, Name = "Rider", Material = "soft"},
                 new Product(){ProductExId = 2, Name = "Visual Studio", Material = "soft"},
                 new Product(){ProductExId = 3, Name = "VS Code", Material = "soft"}
             };
-            var internalProduct = new[]
+            var internalProduct = new List<Product>()
             {
                 new Product(){ProductExId = 1, Name = "Rider", Material = "metal"},
                 new Product(){ProductExId = 2, Name = "Visual studio", Material = "soft"},

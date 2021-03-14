@@ -106,7 +106,7 @@ namespace LBBaseUpdateService.BusinessLogic.UpdateService.States
             var addList = _context.Products.Data.Except(_productsFromSite, new ProductIdComparer()).ToArray();
             var updateList = _productService.GetProductListToUpdate(_context.Products.Data, _productsFromSite.ToList());
             var deleteList = _productsFromSite.Except(_context.Products.Data, new ProductIdComparer())
-            .Select(p => p.ProductIeId).ToArray();
+            .Select(p => p.ProductExId).ToArray();
 
             foreach (var product in addList) _context.Products.ListToAdd.Enqueue(product);
             foreach (var product in updateList) _context.Products.ListToUpdate.Enqueue(product);

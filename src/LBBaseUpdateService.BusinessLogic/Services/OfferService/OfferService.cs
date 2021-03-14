@@ -29,7 +29,6 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService
                 var vendorOffer = vendorOffers.FirstOrDefault(o => o.XmlId == offer.XmlId);
                 if (vendorOffer != null && !offer.Equals(vendorOffer))
                 {
-                    vendorOffer.Id = offer.Id;
                     updateList.Add(vendorOffer);
                 };
             }
@@ -40,7 +39,7 @@ namespace LBBaseUpdateService.BusinessLogic.Services.OfferService
         public int[] GetOffersIdToDelete(List<Offer> vendorOffers, List<Offer> internalOffers)
         {
             return internalOffers.Except(vendorOffers, new OfferIdComparer())
-                .Select(o => o.Id).ToArray();
+                .Select(o => o.XmlId).ToArray();
         }
     }
 }
